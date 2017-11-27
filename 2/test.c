@@ -8,13 +8,13 @@ void read_str(char* str, size_t str_size)
 	{
 		int ch = getchar();
 		str[i] = ch;
-		if(ch == '\n' || ch == EOF) return;
+		if(ch == '\n' || ch == EOF || ch == '\0') return;
 	}
 }
 int main()
 {
-	char str[32];
-	read_str(str,32);
-	printf("%s\n", str);
+	int str[32];
+	fgets(str,32, stdin);
+	printf("%s", str);
 	return 0;
 }

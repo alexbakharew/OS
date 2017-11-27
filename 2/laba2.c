@@ -36,15 +36,6 @@ int peek(stack* st)
 {
 	return st->head->value;
 }
-void read_str(char* str, size_t str_size)
-{
-	size_t i = 0;
-	while(i != str_size)
-	{
-		str[i] = getchar();
-		if(str[i] == '\n' || str[i] == EOF) return;
-	}
-}
 int main(int argc, char* argv[])
 {
 	int const str_len = 32;
@@ -62,36 +53,34 @@ int main(int argc, char* argv[])
 	{
 		close(pipe_1[1]);
 		close(pipe_2[0]);
-		stack* stck = (stack*) malloc(sizeof(stack));
-		stck->head = NULL;
+		stack* stck = (stack*) malloc(sizeof(stack)); // creating stack
+		stck->head = NULL; // creating stack
 		char command[str_len];
 		while(1)
 		{		
 			while(read(pipe_1[0], command, str_len) < 0){}
-			if(command[1] == 'e') // detect second letter in command
-			{ // peek command
+			//printf("%s\n", command);
+			if(!strcmp(command, "peek\n")) 
+			{ 
 				if(stck->head != NULL)
 				{
 					int tmp = peek(stck);
-					sprintf(command,"%d", tmp);
+					sprintf(command,"%d", tmp); // we can't use itoa func. sprintf() is replacement for itoa()
 				}
 				else strcpy(command, "empty stack!");
 			}
-			else if(command[1] == 'u') // detect second letter in command
-			{ // push command
-				printf("this is your command %s\n", command);
-				command[0] = '0';
-				command[1] = '0';
-				command[2] = '0';
-				command[3] = '0';
-				command[4] = '0'; // now we have this string: 00000some_number...
-				int val = atoi(command);
-				printf("this is your number %d\n", val);	
-				if(push(stck, val)) strcpy(command, "success!");
-				else strcpy(command, "not enough memory!");
+			else if(!strcmp(command, "push\n"))
+			{
+				strcpy(command, "Enter number...");
+				write(pipe_2[1], command, str_len);
+				int n;
+				while(read(pipe_1[0], command, str_len) < 0){}
+				n = atoi(command);
+				if(push(stck, n)) strcpy(command, "success!");
+				else strcpy(command, "not enough memory!");	
 			}
-			else if(command[1] == 'o')// detect second letter in command
-			{ // pop command
+			else if(!strcmp(command, "pop\n"))
+			{
 				if(pop(stck)) strcpy(command, "success!");
 				else strcpy(command, "empty stack!");
 			}
@@ -106,7 +95,6 @@ int main(int argc, char* argv[])
 	{
 		close(pipe_1[0]);
 		close(pipe_2[1]); 
-
 		while(1)
 		{	
 			int command[str_len];
@@ -115,10 +103,18 @@ int main(int argc, char* argv[])
 			printf("pop\n");
 			printf("push\n");
 			printf("peek\n");
-			scanf("%s", command); // enter command
-			printf("%s\n", command);
+			fgets(command,32, stdin); // enter command
 			write(pipe_1[1], command, str_len);
 			while(read(pipe_2[0], result, str_len) < 0){}
+			if(!strcmp(result,"Enter number..."))
+			{
+				printf("%s", result);
+				int n;
+				scanf("%d", &n);
+				sprintf(command,"%d", n);
+				write(pipe_1[1], command, str_len);
+				while(read(pipe_2[0], result, str_len) < 0){}
+			}
 			printf("%s\n", result);
 		}
 	}
