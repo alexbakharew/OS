@@ -1,8 +1,8 @@
-#include <cstdlib>
-#include <cstdio>
-#include <iostream>
-#include <cstring>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include <unistd.h>
+#include <stdbool.h>
 #include <sys/types.h>
 typedef struct elem elem;
 struct elem
@@ -10,53 +10,44 @@ struct elem
 	int value;
 	elem* next;
 };
-
-class stack
+typedef struct
 {
-public:
-	stack(){};
-	~stack(){};
-	void push(int);
-	void pop();
-	int get_size();
-	int peek();
-	elem* get_head();
-	void set_head(elem**);
-private:
 	elem* head;
-	size_t size;
-};
-void stack::set_head(elem** el)
+}stack;
+bool push(stack* st, int a)
 {
-	head = (*el);
-	return;
-}
-elem* stack::get_head()
-{
-	return head;
-}
-void stack::push(int a)
-{
-	elem* tmp = new elem;
+	elem* tmp = (elem*) malloc(sizeof(elem));
+	if(tmp == NULL) return false;
 	tmp->value = a;
-	tmp->next = get_head();
-	set_head(&tmp);
-	return;
+	tmp->next = st->head;
+	st->head = tmp;
+	return true;
 }
-void stack::pop()
+bool pop(stack* st)
 {
-	elem* tmp = get_head();
-	set_head(&((get_head())->next));
-	delete tmp;
+	elem* tmp = st->head;
+	if(tmp == NULL) return false;
+	st->head = st->head->next;
+	free(tmp);
 	tmp = NULL;
+	return true;
 }
-int stack::peek()
+int peek(stack* st)
 {
-	return get_head()->value;
+	return st->head->value;
+}
+void read_str(char* str, size_t str_size)
+{
+	size_t i = 0;
+	while(i != str_size)
+	{
+		str[i] = getchar();
+		if(str[i] == '\n' || str[i] == EOF) return;
+	}
 }
 int main(int argc, char* argv[])
 {
-	size_t const str_len = 32;
+	int const str_len = 32;
 	int pipe_1[2];//from user to server
 	int pipe_2[2];//from server to user
 	pipe(pipe_1);
@@ -69,49 +60,66 @@ int main(int argc, char* argv[])
 	}
 	if(child_pid == 0) // we are in child procces(server)
 	{
-		close(pipe_1[1]); 
+		close(pipe_1[1]);
 		close(pipe_2[0]);
-		stack stck;
+		stack* stck = (stack*) malloc(sizeof(stack));
+		stck->head = NULL;
 		char command[str_len];
 		while(1)
 		{		
-			read(pipe_1, command, str_len);
-			if(command[1] == 'e') // second letter in command
+			while(read(pipe_1[0], command, str_len) < 0){}
+			if(command[1] == 'e') // detect second letter in command
 			{ // peek command
-
+				if(stck->head != NULL)
+				{
+					int tmp = peek(stck);
+					sprintf(command,"%d", tmp);
+				}
+				else strcpy(command, "empty stack!");
 			}
-			else if(command[1] == 'u')
+			else if(command[1] == 'u') // detect second letter in command
 			{ // push command
-
+				printf("this is your command %s\n", command);
+				command[0] = '0';
+				command[1] = '0';
+				command[2] = '0';
+				command[3] = '0';
+				command[4] = '0'; // now we have this string: 00000some_number...
+				int val = atoi(command);
+				printf("this is your number %d\n", val);	
+				if(push(stck, val)) strcpy(command, "success!");
+				else strcpy(command, "not enough memory!");
 			}
-			else if(command[1] == 'o')
+			else if(command[1] == 'o')// detect second letter in command
 			{ // pop command
-
+				if(pop(stck)) strcpy(command, "success!");
+				else strcpy(command, "empty stack!");
 			}
 			else
 			{
-				printf("Wrong request. Try again\n");
+				strcpy(command, "Wrong request. Try again!");
 			}
-		}
+			write(pipe_2[1], command, str_len);
+		}	
 	}
 	else // parent process(user)
 	{
 		close(pipe_1[0]);
 		close(pipe_2[1]); 
+
 		while(1)
 		{	
 			int command[str_len];
-			int result[str_len];
+			char result[str_len];
 			printf("What you want to do?\n");
 			printf("pop\n");
 			printf("push\n");
 			printf("peek\n");
 			scanf("%s", command); // enter command
-			write(pipe_1, command, str_len);
-			read(pipe_2, result, str_len);
+			printf("%s\n", command);
+			write(pipe_1[1], command, str_len);
+			while(read(pipe_2[0], result, str_len) < 0){}
 			printf("%s\n", result);
-			//exit(0);
 		}
 	}
-	return 0;
 }
