@@ -13,8 +13,15 @@ void read_str(char* str, size_t str_size)
 }
 int main()
 {
-	int str[32];
-	fgets(str,32, stdin);
-	printf("%s", str);
+	int arr[32];
+	for(int i = 0; i < 32; i++)
+	{
+		arr[i] = i;
+	}
+	arr={0};
+		for(int i = 0; i < 32; i++)
+	{
+		printf("%d\n", arr[i]);
+	}
 	return 0;
 }

@@ -74,6 +74,7 @@ int main(int argc, char* argv[])
 				strcpy(command, "Enter number...");
 				write(pipe_2[1], command, str_len);
 				int n;
+				printf("wait for input\n");
 				while(read(pipe_1[0], command, str_len) < 0){}
 				n = atoi(command);
 				if(push(stck, n)) strcpy(command, "success!");
@@ -108,8 +109,10 @@ int main(int argc, char* argv[])
 			while(read(pipe_2[0], result, str_len) < 0){}
 			if(!strcmp(result,"Enter number..."))
 			{
-				printf("%s", result);
+
+				printf("%s\n", result);
 				int n;
+				printf("wait for input1\n");
 				scanf("%d", &n);
 				sprintf(command,"%d", n);
 				write(pipe_1[1], command, str_len);
