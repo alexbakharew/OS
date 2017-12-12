@@ -1,0 +1,11 @@
+In computing, mmap(2) is a POSIX-compliant Unix system call that maps files or devices into memory. It is a method of memory-mapped file I/O. It naturally implements demand paging, because file contents are not read from disk initially and do not use physical RAM at all. The actual reads from disk are performed in a "lazy" manner, after a specific location is accessed. After the memory is no longer needed, it is important to munmap(2) the pointers to it. Protection information can be managed using mprotect(2), and special treatment can be enforced using madvise(2).
+
+In Linux, Mac OS X and the BSDs, mmap can create several types of mappings.
+
+Contents  [hide] 
+1	History
+2	File-backed and anonymous
+3	Memory visibility
+4	Example of usage under the C programming language
+5	See also
+6	References and further reading
