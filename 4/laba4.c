@@ -10,20 +10,35 @@
 #define PAGE_SIZE 4096
 #define PATTERN_SIZE 128
 #define LINE_ERROR -101
+#define TEST_FILE "tmp.txt"
 
 int fd;
 int page_count = 0;
 char* page = NULL;
+void load_page(size_t n)
+{
+	//if(page != NULL) munmap(page, PAGE_SIZE);
+	page = NULL;
+	page_count = n;
+	if(page_count < 0) page_count = 0;
+	page = (char*) mmap(0, PAGE_SIZE, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, PAGE_SIZE * page_count);
+	if(page == MAP_FAILED) printf("Erorr while mapping memory\n");
+	printf("JOPA\n");	
+	//page[PAGE_SIZE] = '\0';
+	return;
+}
 void wc() // amount of lines and chars in whole file
 {
 	int c_count = 0;
 	int l_count = 0;
-	char symbol;
-	while(read(fd, &symbol, sizeof(char)))
+	size_t i = 0;
+	load_page(0);
+	while(page[i] != '\0')
 	{
-		if(symbol == EOF) break;
-		else if(symbol == '\n') ++l_count;
+		if(page[i] == EOF) break;
+		else if(page[i] == '\n') ++l_count;
 		else ++c_count;
+		++i;
 	}
 	++l_count;
 	printf("%d characters, %d lines\n", c_count, l_count);
@@ -31,15 +46,19 @@ void wc() // amount of lines and chars in whole file
 }
 void change_file()
 {
-	printf("Enter the name of needed file\n");
-	char file_name[128];
-	scanf("%s", file_name);
-	int temp_fd = open(file_name, O_RDWR | O_APPEND);
+	//printf("Enter the name of needed file\n");
+	printf("command\n");
+	//char file_name[128];
+	//scanf("%s", file_name);
+	int temp_fd = open(TEST_FILE, O_RDWR | O_APPEND);
+	
 	if(temp_fd > 0)
 	{
 		fd = temp_fd;
 		if(page != NULL) munmap(page, PAGE_SIZE);
 		page = NULL;
+		//printf("OK\n");
+		return;
 	}
 	else perror("unable to load file!\n");
 	return;
@@ -50,17 +69,6 @@ void quit(int fd)
 	if(page != NULL) munmap(page, PAGE_SIZE);
 	page = NULL;
 	printf("goodbye!\n");
-	return;
-}
-void load_page(size_t n)
-{
-	if(page != NULL) munmap(page, PAGE_SIZE);
-	page = NULL;
-	page_count = n;
-	if(page_count < 0) page_count = 0;
-	page = (char*) mmap(NULL, PAGE_SIZE, PROT_READ, MAP_PRIVATE, fd, PAGE_SIZE * page_count);
-	page[PAGE_SIZE + 1] = '\0';
-	if(page == NULL) perror("Erorr while mapping memory\n");
 	return;
 }
 int find_line(size_t n) // n - num of line
@@ -163,50 +171,6 @@ bool is_opened() // 4
 	return false;
 }
 
-void actions(char* command, int arg_c, char* arg_v) 
-{
-	if(strcmp(command, "cf") == 0) change_file();
-	else if(strcmp(command, "wc") == 0) wc();
-	else if(strcmp(command, "rl") == 0) 
-	{
-		size_t n;
-		if(arg_c == 2) n = (size_t)arg_v[2];
-		else scanf("%lu", &n);
-		read_line(n);
-	}
-	else if(strcmp(command, "fp") == 0)
-	{
-		if(arg_c == 3)
-		{
-			find_pattern(arg_v[2], (size_t)arg_v[3]);
-		}
-		else
-		{
-			size_t n;
-			char pattern[PATTERN_SIZE];
-			scanf("%lu", &n);
-			scanf("%s", pattern);
-			find_pattern(pattern, n);
-		}
-	}
-	else if(strcmp(command,"ow") == 0)
-	{
-		if(arg_c == 3)
-		{
-			overwrite((size_t)arg_v[2], arg_v[3]);
-		}
-		else
-		{
-			size_t n;
-			char text[PATTERN_SIZE];
-			scanf("%lu", &n);
-			scanf("%s", text);
-			overwrite(n, text);
-		}
-	}
-	else if(strcmp(command,"io") == 0){}
-}
-
 void info()
 {
 	printf("you can proceed following commands:\n");
@@ -219,24 +183,74 @@ void info()
 	printf("quit - exit from text editor\n");
 	return;
 }
-int main()
+int main(int argc, char* argv[])
 {
-	if(argc == 3) //non-interactive mode
+
+	char command[8] = {"default"};
+	if(argc == 2 && strcmp(argv[1], "?") == 0) info();
+	else if(argc > 1) //non-interactive mode
 	{
 		fd = open(argv[1], O_RDWR | O_APPEND);
-		char* command = argv[2];
-		actions(command);
-		return 0;
+		strcpy(command, argv[2]);
+		//command = argv[2];
 	}
-	else if(argv[1] == '?') info();
-	change_file();
-	char* command;
+	else change_file();
+	
 	while(1)
 	{
-		printf("What you want to do?\n For help, hit '?'\n");
-		scanf("%s", command);
+		//printf("What you want to do?\n For help, hit '?'\n");
+		if(strcmp(command, "default") == 0) scanf("%s", command);
 		if(strcmp("quit", command) == 0) break;
-		actions(command,argc, argv);
+		{//scope without func
+
+
+			if(strcmp(command, "cf") == 0) change_file();
+			else if(strcmp(command, "wc") == 0) 
+			{
+				wc();
+			}
+			else if(strcmp(command, "rl") == 0) 
+			{
+				size_t n;
+				if(argc == 2) n = (size_t)argv[2];
+				else scanf("%lu", &n);
+				read_line(n);
+			}
+			else if(strcmp(command, "fp") == 0)
+			{
+				if(argc == 3)
+				{
+					find_pattern(argv[2], (size_t)argv[3]);
+				}
+				else
+				{
+					size_t n;
+					char pattern[PATTERN_SIZE];
+					scanf("%lu", &n);
+					scanf("%s", pattern);
+					find_pattern(pattern, n);
+				}
+			}
+			else if(strcmp(command,"ow") == 0)
+			{
+				if(argc == 3)
+				{
+					overwrite((size_t)argv[2], argv[3]);
+				}
+				else
+				{
+					size_t n;
+					char text[PATTERN_SIZE];
+					scanf("%lu", &n);
+					scanf("%s", text);
+					overwrite(n, text);
+				}
+			}
+			else if(strcmp(command,"io") == 0){}
+
+
+		}//scope without func
+
 	}
 	quit(fd);
 	return 0;
