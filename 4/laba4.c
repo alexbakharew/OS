@@ -15,15 +15,23 @@
 int fd;
 int page_count = 0;
 char* page = NULL;
+void print_page()
+{
+	if(page == NULL) return;
+	for(int i = 0; i < PAGE_SIZE; ++i)
+	{
+		putchar(page[i]);
+	}
+}
 void load_page(size_t n)
 {
-	//if(page != NULL) munmap(page, PAGE_SIZE);
+	if(page != NULL) munmap(page, PAGE_SIZE);
 	page = NULL;
 	page_count = n;
 	if(page_count < 0) page_count = 0;
 	page = (char*) mmap(0, PAGE_SIZE, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, PAGE_SIZE * page_count);
 	if(page == MAP_FAILED) printf("Erorr while mapping memory\n");
-	printf("JOPA\n");	
+	//printf("JOPA\n");	
 	//page[PAGE_SIZE] = '\0';
 	return;
 }
@@ -32,25 +40,39 @@ void wc() // amount of lines and chars in whole file
 	int c_count = 0;
 	int l_count = 0;
 	size_t i = 0;
-	load_page(0);
-	while(page[i] != '\0')
+	load_page(0); // wc on first page
+	while(page[i] != '\0' || page[i] == EOF)
 	{
-		if(page[i] == EOF) break;
-		else if(page[i] == '\n') ++l_count;
+		if(page[i] == '\n') 
+		{
+			++l_count;
+			++c_count;
+		}
 		else ++c_count;
 		++i;
+		if(i == PAGE_SIZE) // case, when we catch last char in the page
+		{	
+			if(page[i - 1] == '\n') 
+			{
+				++l_count;
+				++c_count;
+			}
+			else ++c_count;
+			i = 0;
+			++page_count;
+			load_page(page_count);
+		}
 	}
-	++l_count;
 	printf("%d characters, %d lines\n", c_count, l_count);
 	return;
 }
 void change_file()
 {
-	//printf("Enter the name of needed file\n");
-	printf("command\n");
-	//char file_name[128];
-	//scanf("%s", file_name);
-	int temp_fd = open(TEST_FILE, O_RDWR | O_APPEND);
+	printf("Enter the name of needed file\n");
+	//printf("command\n");
+	char file_name[128];
+	scanf("%s", file_name);
+	int temp_fd = open(file_name, O_RDWR | O_APPEND);
 	
 	if(temp_fd > 0)
 	{
@@ -104,8 +126,9 @@ void read_line(size_t n) // 1
 		printf("No such line!\n");
 		return;
 	}
-	while(page[i] != '\n' || page[i] != '\0')
+	while(page[i] != '\n')
 	{
+		//if(page[i] == '\n') break;
 		putchar(page[i]);
 		++i;
 	}	
@@ -196,13 +219,12 @@ int main(int argc, char* argv[])
 	}
 	else change_file();
 	
+	printf("What you want to do? For help, hit '?'\n");
 	while(1)
 	{
-		//printf("What you want to do?\n For help, hit '?'\n");
 		if(strcmp(command, "default") == 0) scanf("%s", command);
 		if(strcmp("quit", command) == 0) break;
 		{//scope without func
-
 
 			if(strcmp(command, "cf") == 0) change_file();
 			else if(strcmp(command, "wc") == 0) 
@@ -247,8 +269,10 @@ int main(int argc, char* argv[])
 				}
 			}
 			else if(strcmp(command,"io") == 0){}
-
-
+			else if(strcmp(command, "?") == 0) info();
+			if(argc > 2) return 0;
+			printf("\nWhat you want to do? For help, hit '?'\n");
+			scanf("%s", command);
 		}//scope without func
 
 	}
