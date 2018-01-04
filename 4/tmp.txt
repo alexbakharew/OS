@@ -1,261 +1,660 @@
-The Open Group Base Specifications Issue 6
-IEEE Std 1003.1, 2004 Edition
-Copyright © 2001-2004 The IEEE and The Open Group, All Rights reserved.
-A newer edition of this document exists here
-NAME
-mmap - map pages of memory
-SYNOPSIS
-[MC3] [Option Start] #include <sys/mman.h>
 
-void *mmap(void *addr, size_t len, int prot, int flags,
-       int fildes, off_t off); [Option End]
+SpaceX
+From Wikipedia, the free encyclopedia
+This article is about the rocket manufacturer. For the British art gallery, see SpaceX (art gallery).
+"Space exploration technologies" redirects here. For other uses, see Outline of space technology.
+Space Exploration Technologies Corp.
+SpaceX-Logo.svg
+SpaceX KSC LC-39A hangar (23791728242).jpg
+SpaceX hangar and Launch Pad 39A at Kennedy Space Center, December 2015
+Trading name
+SpaceX
+Type
+Private
+Industry	Aerospace
+Founded	May 6, 2002; 15 years ago[1]
+Founder	Elon Musk
+Headquarters	Hawthorne, California, U.S.
+33.9207°N 118.3278°WCoordinates: 33.9207°N 118.3278°W
+Key people
+Elon Musk
+(CEO and CTO)
+Gwynne Shotwell
+(President and COO)
+Tom Mueller
+(CTO of Propulsion)
+Products	
+Falcon launch vehicles
+Dragon capsules
+ASDS landing platform
+Services	Orbital rocket launch
+Owner	Elon Musk Trust
+(54% equity; 78% voting control)[2]
+Number of employees
+Est. 7,000[3]
+(November 2017)
+Website	www.spacex.com
+Footnotes / references
+[4][5][6][7]
+Space Exploration Technologies Corp., trading as SpaceX, is an American aerospace manufacturer and space transport services company headquartered in Hawthorne, California. It was founded in 2002 by entrepreneur Elon Musk with the goal of reducing space transportation costs and enabling the colonization of Mars.[8] SpaceX has since developed the Falcon launch vehicle family and the Dragon spacecraft family, which both currently deliver payloads into Earth orbit.
+
+SpaceX's achievements include the first privately funded liquid-propellant rocket to reach orbit (Falcon 1 in 2008);[9] the first privately funded company to successfully launch, orbit, and recover a spacecraft (Dragon in 2010); the first private company to send a spacecraft to the International Space Station (Dragon in 2012);[10] the first propulsive landing for an orbital rocket (Falcon 9 in 2015); and the first reuse of an orbital rocket (Falcon 9 in 2017). As of March 2017, SpaceX has since flown ten missions to the International Space Station (ISS) under a cargo resupply contract.[11] NASA also awarded SpaceX a further development contract in 2011 to develop and demonstrate a human-rated Dragon, which would be used to transport astronauts to the ISS and return them safely to Earth.[12]
+
+SpaceX announced in 2011 that they were beginning a privately funded reusable launch system technology development program. In December 2015, a first stage was flown back to a landing pad near the launch site, where it successfully accomplished a propulsive vertical landing. This was the first such achievement by a rocket for orbital spaceflight.[13] In April 2016, with the launch of CRS-8, SpaceX successfully vertically landed a first stage on an ocean drone-ship landing platform.[14] In May 2016, in another first, SpaceX again landed a first stage, but during a significantly more energetic geostationary transfer orbit mission.[15] In March 2017, SpaceX became the first to successfully re-launch and land the first stage of an orbital rocket.[16]
+
+In September 2016, CEO Elon Musk unveiled the mission architecture of the Interplanetary Transport System program, an ambitious privately funded initiative to develop spaceflight technology for use in manned interplanetary spaceflight, and which, if demand emerges, could lead to sustainable human settlements on Mars over the long term. This is the main purpose this System was designed for.[17][18] In 2017, Elon Musk announced that the company had been contracted by two private individuals to send them in a Dragon spacecraft on a free return trajectory around the Moon.[19][20][21] Provisionally launching in 2018, this could become the first instance of lunar tourism.
+
+Contents  [hide] 
+1	History
+1.1	Goals
+1.2	Achievements
+1.3	Setbacks
+1.4	Ownership, funding and valuation
+2	Spacecraft and flight hardware
+2.1	Rocket engines
+2.2	Falcon launch vehicles
+2.3	Dragon capsules
+3	Research and development
+3.1	Reusable launch system
+3.2	Interplanetary Transport System
+3.3	Other projects
+4	Infrastructure
+4.1	Headquarters and manufacturing plant
+4.2	Development and test facility
+4.3	Launch facilities
+4.4	Satellite prototyping facility
+5	Launch contracts
+5.1	NASA contracts
+5.2	Defense contracts
+5.3	Commercial contracts
+6	Launch market competition and pricing pressure
+7	See also
+8	References
+9	Further reading
+10	External links
+History[edit]
 
-DESCRIPTION
-The mmap() function shall establish a mapping between a process' address space and a file, shared memory object, or [TYM] [Option Start]  typed memory object. [Option End] The format of the call is as follows:
+SpaceX employees with the Dragon capsule at SpaceX HQ in Hawthorne, California, February 2015.
+Main article: History of SpaceX
+In 2001, Elon Musk conceptualized Mars Oasis, a project to land a miniature experimental greenhouse and grow plants on Mars, "so this would be the furthest that life’s ever traveled"[22] in an attempt to regain public interest in space exploration and increase the budget of NASA.[23][24][25] Musk tried to buy cheap rockets from Russia but returned empty-handed after failing to find rockets for an affordable price.[26][27]
 
-pa=mmap(addr, len, prot, flags, fildes, off);
 
-The mmap() function shall establish a mapping between the address space of the process at an address pa for len bytes to the memory object represented by the file descriptor fildes at offset off for len bytes. The value of pa is an implementation-defined function of the parameter addr and the values of flags, further described below. A successful mmap() call shall return pa as its result. The address range starting at pa and continuing for len bytes shall be legitimate for the possible (not necessarily current) address space of the process. The range of bytes starting at off and continuing for len bytes shall be legitimate for the possible (not necessarily current) offsets in the file, shared memory object, or [TYM] [Option Start]  typed memory object [Option End]  represented by fildes.
+Falcon 9 carrying CRS-7 Dragon on SLC-40 pad.
+On the flight home, Musk realized that he could start a company that could build the affordable rockets he needed.[27] According to early Tesla and SpaceX investor Steve Jurvetson,[28] Musk calculated that the raw materials for building a rocket actually were only 3 percent of the sales price of a rocket at the time. By applying vertical integration,[26] producing around 85% of launch hardware in-house,[29][30] and the modular approach from software engineering, SpaceX could cut launch price by a factor of ten and still enjoy a 70 percent gross margin.[31] SpaceX started with the smallest useful orbital rocket, instead of building a more complex and riskier launch vehicle, which could have failed and bankrupted the company.[32]
 
-[TYM] [Option Start] If fildes represents a typed memory object opened with either the POSIX_TYPED_MEM_ALLOCATE flag or the POSIX_TYPED_MEM_ALLOCATE_CONTIG flag, the memory object to be mapped shall be that portion of the typed memory object allocated by the implementation as specified below. In this case, if off is non-zero, the behavior of mmap() is undefined. If fildes refers to a valid typed memory object that is not accessible from the calling process, mmap() shall fail. [Option End]
 
-The mapping established by mmap() shall replace any previous mappings for those whole pages containing any part of the address space of the process starting at pa and continuing for len bytes.
+Launch of Falcon 9 carrying ORBCOMM OG2-M1.
+In early 2002, Musk was seeking staff for his new space company, soon to be named SpaceX. Musk approached rocket engineer Tom Mueller (now SpaceX's CTO of Propulsion) and Mueller agreed to work for Musk, and thus SpaceX was born.[33] SpaceX was first headquartered in a warehouse in El Segundo, California. The company has grown rapidly since it was founded in 2002, growing from 160 employees in November 2005 to 1,100 in 2010,[34][35] 3,800 employees and contractors by October 2013,[36] and near 5,000 by late 2015.[37][38] As of April 2017, the company has nearly 6,000 employees.[39]In 2016, Musk gave a speech at the International Astronautical Congress, where he explained that the US government regulates rocket technology as an "advanced weapon technology", making it unfortunately and prohibitively difficult to hire non-Americans.[40]
 
-If the size of the mapped file changes after the call to mmap() as a result of some other operation on the mapped file, the effect of references to portions of the mapped region that correspond to added or removed portions of the file is unspecified.
 
-The mmap() function shall be supported for regular files, shared memory objects, and [TYM] [Option Start]  typed memory objects. [Option End] Support for any other type of file is unspecified.
+Falcon 9 rocket's first stage on the landing pad after the first successful vertical landing of an orbital rocket stage, OG2 Mission.
+At year-end 2012, SpaceX had over 40 launches on its manifest representing about $4 billion in contract revenue, with many of those contracts already making progress payments to SpaceX. The contracts included both commercial and government (NASA/DOD) customers.[41] As of December 2013, SpaceX had a total of 50 future launches under contract; two-thirds of them were for commercial customers.[42][43] In late 2013, space industry media began to comment on the phenomenon that SpaceX prices are undercutting the major competitors in the commercial comsat launch market—the Ariane 5 and Proton-M[44]—at which time SpaceX had at least 10 further geostationary orbit flights on its books.[43]
 
-If len is zero, mmap() shall fail and no mapping shall be established.
+In September 2017, Elon Musk released first prototype images of their space suits to be used in future missions. The suit is in testing phase and it is designed to cope with 2 ATM pressure in vacuum.[1][45]
 
-The parameter prot determines whether read, write, execute, or some combination of accesses are permitted to the data being mapped. The prot shall be either PROT_NONE or the bitwise-inclusive OR of one or more of the other flags in the following table, defined in the <sys/mman.h> header.
 
-Symbolic Constant
+Falcon 9 first stage on an ASDS barge after the first successful landing at sea, CRS-8 Mission.
+Goals[edit]
+Musk has stated that one of his goals is to improve the cost and reliability of access to space, ultimately by a factor of ten.[46] The company plans in 2004 called for "development of a heavy lift product and even a super-heavy, if there is customer demand" with each size increase resulting in a significant decrease in cost per pound to orbit. CEO Elon Musk said: "I believe $500 per pound ($1,100/kg) or less is very achievable."[47]
 
-Description
 
-PROT_READ
+Conceptual rendering of Falcon Heavy at Pad 39A, Cape Canaveral.
+A major goal of SpaceX has been to develop a rapidly reusable launch system. As of March 2013, the publicly announced aspects of this technology development effort include an active test campaign of the low-altitude, low-speed Grasshopper vertical takeoff, vertical landing (VTVL) technology demonstrator rocket,[48][49][50] and a high-altitude, high-speed Falcon 9 post-mission booster return test campaign where—beginning in mid-2013, with the sixth overall flight of Falcon 9—every first stage will be instrumented and equipped as a controlled descent test vehicle to accomplish propulsive-return over-water tests.[51] SpaceX COO Gwynne Shotwell said at the Singapore Satellite Industry Forum in summer 2013 "If we get this [reusable technology] right, and we’re trying very hard to get this right, we’re looking at launches to be in the US$5 to 7 million range, which would really change things dramatically."[52]
 
-Data can be read.
+Musk stated in a 2011 interview that he hopes to send humans to Mars' surface within 10–20 years.[53] In 2010, Musk's calculations convinced him that the colonization of Mars was possible.[54] In June 2013, Musk used the descriptor "Mars Colonial Transporter" (only later changed to "Interplanetary Transport System"; see below) to refer to the privately funded development project to design and build a spaceflight system of rocket engines, launch vehicles and space capsules to transport humans to Mars and return to Earth.[55] In March 2014, COO Gwynne Shotwell said that once the Falcon Heavy and Dragon 2 crew version are flying, the focus for the company engineering team will be on developing the technology to support the transport infrastructure necessary for Mars missions.[56]
 
-PROT_WRITE
+Achievements[edit]
+Landmark achievements of SpaceX include:[57]
 
-Data can be written.
+The first privately funded liquid-fueled rocket to reach orbit (Falcon 1 Flight 4 — September 28, 2008)
+The first privately funded company to successfully launch, orbit, and recover a spacecraft (Falcon 9 Flight 2 — December 9, 2010)
+The first private company to send a spacecraft to the International Space Station (Falcon 9 Flight 3 — May 25, 2012)
+The first private company to send a satellite into geosynchronous orbit (Falcon 9 Flight 7 — December 3, 2013)
+The first landing of an orbital rocket's first stage on land (Falcon 9 Flight 20 — December 22, 2015)
+The first landing of an orbital rocket's first stage on an ocean platform (Falcon 9 Flight 23 — April 8, 2016)
+The first relaunch and landing of a used orbital rocket (Falcon 9 Flight 32 — March 30, 2017)[58]
+The first controlled flyback and recovery of a payload fairing (Falcon 9 Flight 32 — March 30, 2017)[59]
+The first reflight of a commercial cargo spacecraft. (Falcon 9 Flight 35 — June 3, 2017)[60]
+In December 2015, SpaceX launched an upgraded Falcon 9 rocket from Cape Canaveral Air Force Station into Low Earth orbit, on a mission designated Flight 20. After completing its primary burn, the first stage of the multistage rocket detached from the second stage as usual. The first stage then fired three of its engines to send it back to Cape Canaveral, where it achieved the world's first successful landing of a rocket that was used for an orbital launch.[61]
 
-PROT_EXEC
+The upgraded Falcon 9 rocket is currently the only space launch system that uses densified propellants. SpaceX successfully re-introduced this technology with the aforementioned Flight 20. Before, propellant densification had been used only on some ICBMs, which are no longer in service, and the (unsuccessful) Soviet lunar rocket N1.[62]
 
-Data can be executed.
+Setbacks[edit]
+In March 2013, a Dragon spacecraft in orbit developed issues with its thrusters. Due to blocked fuel valves, the craft was unable to properly control itself. SpaceX engineers were able to remotely clear the blockages. Because of this issue, the craft arrived at and docked with the International Space Station one day later than expected.
 
-PROT_NONE
+In June 2015, CRS-7 launched a Dragon capsule atop a Falcon 9 to resupply the International Space Station. All telemetry readings were nominal until 2 minutes and 19 seconds into the flight, when a loss of helium pressure was detected and a cloud of vapor appeared outside the second stage. A few seconds after this, the second stage exploded. The first stage continued to fly for a few seconds before disintegrating due to aerodynamic forces. The capsule was thrown off and survived the explosion, transmitting data until it was destroyed on impact.[63] Later it was revealed that the capsule could have landed intact if it had software to deploy its parachutes in case of a launch mishap.[64] The problem was discovered to be a failed 2-foot-long steel strut purchased from a supplier to hold a helium pressure vessel that broke free due to the force of acceleration.[65] This caused a breach and allowed high-pressure helium to escape into the low-pressure propellant tank, causing the failure. The Dragon software issue was also fixed in addition to an analysis of the entire program in order to ensure proper abort mechanisms are in place for future rockets and their payload.[66]
 
-Data cannot be accessed.
+In September 2016, a Falcon 9 exploded during a propellant fill operation for a standard pre-launch static fire test.[67][68] The payload, the Spacecom Amos-6 communications satellite valued at $200 million, was destroyed.[69] Musk described the event as the "most difficult and complex failure" ever in SpaceX's history; SpaceX reviewed nearly 3,000 channels of telemetry and video data covering a period of 35–55 milliseconds for the postmortem.[70] Musk reported the explosion was caused by the liquid oxygen that is used as propellant turning so cold that it solidified and it ignited with carbon composite helium vessels.[71] The rocket explosion sent the company into a four-month launch hiatus while it worked out what went wrong, and SpaceX finally returned to flight in January 2017.[72]
 
-If an implementation cannot support the combination of access types specified by prot, the call to mmap() shall fail.
+Ownership, funding and valuation[edit]
 
-An implementation may permit accesses other than those specified by prot; [MPR] [Option Start]  however, if the Memory Protection option is supported, the implementation shall not permit a write to succeed where PROT_WRITE has not been set or shall not permit any access where PROT_NONE alone has been set. The implementation shall support at least the following values of prot: PROT_NONE, PROT_READ, PROT_WRITE, and the bitwise-inclusive OR of PROT_READ and PROT_WRITE. [Option End] If the Memory Protection option is not supported, the result of any access that conflicts with the specified protection is undefined. The file descriptor fildes shall have been opened with read permission, regardless of the protection options specified. If PROT_WRITE is specified, the application shall ensure that it has opened the file descriptor fildes with write permission unless MAP_PRIVATE is specified in the flags parameter as described below.
+Successful SpaceX launches by year
+In August 2008, SpaceX accepted a $20 million investment from Founders Fund.[73] In early 2012, approximately two-thirds of the company were owned by its founder[74] and his 70 million shares were then estimated to be worth $875 million on private markets,[75] which roughly valued SpaceX at $1.3 billion as of February 2012.[76] After the COTS 2+ flight in May 2012, the company private equity valuation nearly doubled to $2.4 billion.[77][78] In January 2015, SpaceX raised $1 billion in funding from Google and Fidelity, in exchange for 8.333% of the company, establishing the company valuation at approximately $12 billion. Google and Fidelity joined the then current investorship group of Draper Fisher Jurvetson, Founders Fund, Valor Equity Partners and Capricorn.[79][80]
 
-The parameter flags provides other information about the handling of the mapped data. The value of flags is the bitwise-inclusive OR of these options, defined in <sys/mman.h>:
+As of May 2012, SpaceX had operated on total funding of approximately $1 billion in its first ten years of operation. Of this, private equity provided about $200M, with Musk investing approximately $100M and other investors having put in about $100M (Founders Fund, Draper Fisher Jurvetson, …).[81] The remainder has come from progress payments on long-term launch contracts and development contracts. As of April 2012, NASA had put in about $400–500M of this amount, with most of that as progress payments on launch contracts.[76] By May 2012, SpaceX had contracts for 40 launch missions, and each of those contracts provide down payments at contract signing, plus many are paying progress payments as launch vehicle components are built in advance of mission launch, driven in part by US accounting rules for recognizing long-term revenue.[76]
 
-Symbolic Constant
+Congressional testimony by SpaceX in 2017 suggested that the unusual NASA process of "setting only a high-level requirement for cargo transport to the space station [while] leaving the details to industry" had allowed SpaceX to design and develop the Falcon 9 rocket on its own at substantially lower cost. "According to NASA's own independently verified numbers, SpaceX’s development costs of both the Falcon 1 and Falcon 9 rockets were estimated at approximately US$390 million in total. "In 2011, NASA estimated that it would have cost the agency about US$4 billion to develop a rocket like the Falcon 9 booster based upon NASA's traditional contracting processes" and that "a more 'commercial development' approach might have allowed the agency to pay only US$1.7 billion.[82]
 
-Description
+In 2012, an initial public offering (IPO) was perceived as possible by the end of 2013,[75] but then Musk stated in June 2013 that he planned to hold off any potential IPO until after the "Mars Colonial Transporter is flying regularly,"[55] and this was reiterated in 2015 indicating that it would be many years before SpaceX would become a publicly traded company,[83] where Musk stated that "I just don’t want [SpaceX] to be controlled by some private equity firm that would milk it for near-term revenue."[84]
 
-MAP_SHARED
+In July 2017, the Company raised US$350m at a valuation of US$21 billion.[85]
 
-Changes are shared.
+Spacecraft and flight hardware[edit]
 
-MAP_PRIVATE
 
-Changes are private.
+SpaceX's Falcon 9 rocket carrying the Dragon spacecraft, lifts off during the COTS Demo Flight 1 in December 2010.
+SpaceX currently manufactures two broad classes of rocket engine in-house: the kerosene fueled Merlin engines and the hypergolic fueled Draco/SuperDraco vernier thrusters. The Merlin powers their two main space launch vehicles: the large Falcon 9,[86] which flew successfully into orbit on its maiden launch in June 2010[87] and the super-heavy class Falcon Heavy, which is scheduled to make its first flight in January 2018. SpaceX also manufactures the Dragon, a pressurized orbital spacecraft that is launched on top of a Falcon 9 booster to carry cargo to low Earth orbit, and the follow-on Dragon 2 spacecraft, currently in the process of being human-rated through a variety of design reviews and flight tests that began in 2014.[88][89]
 
-MAP_FIXED
+Rocket engines[edit]
+Main article: SpaceX rocket engines
+Since the founding of SpaceX in 2002, the company has developed three families of rocket engines — Merlin and Kestrel for launch vehicle propulsion, and the Draco control thrusters. SpaceX is currently developing two further rocket engines: SuperDraco and Raptor.
 
-Interpret addr exactly.
+Merlin is a family of rocket engines developed by SpaceX for use on its Falcon rocket family of launch vehicles. Merlin engines use LOX and RP-1 as propellants in a gas-generator power cycle. The Merlin engine was originally designed for sea recovery and reuse. The injector at the heart of Merlin is of the pintle type that was first used in the Apollo Program for the lunar module landing engine. Propellants are fed via a single shaft, dual impeller turbo-pump.
 
-Implementations that do not support the Memory Mapped Files option are not required to support MAP_PRIVATE.
+Kestrel is a LOX/RP-1 pressure-fed rocket engine, and was used as the Falcon 1 rocket's second stage main engine. It is built around the same pintle architecture as SpaceX's Merlin engine but does not have a turbo-pump, and is fed only by tank pressure. Its nozzle is ablatively cooled in the chamber and throat, is also radiatively cooled, and is fabricated from a high strength niobium alloy.
 
-It is implementation-defined whether MAP_FIXED shall be supported. [XSI] [Option Start]  MAP_FIXED shall be supported on XSI-conformant systems. [Option End]
+Draco are hypergolic liquid-propellant rocket engines that utilize monomethyl hydrazine fuel and nitrogen tetroxide oxidizer. Each Draco thruster generates 400 newtons (90 lbf) of thrust.[90] They are used as reaction control system (RCS) thrusters on the Dragon spacecraft.[91] SuperDraco engines are a much more powerful version of the Draco thrusters, which will be initially used as landing and launch escape system engines on the version 2 Dragon spacecraft, Dragon 2.
 
-MAP_SHARED and MAP_PRIVATE describe the disposition of write references to the memory object. If MAP_SHARED is specified, write references shall change the underlying object. If MAP_PRIVATE is specified, modifications to the mapped data by the calling process shall be visible only to the calling process and shall not change the underlying object. It is unspecified whether modifications to the underlying object done after the MAP_PRIVATE mapping is established are visible through the MAP_PRIVATE mapping. Either MAP_SHARED or MAP_PRIVATE can be specified, but not both. The mapping type is retained across fork().
+Raptor is a new family of methane-fueled full flow staged combustion cycle engines to be used in its future Interplanetary Transport System. Development versions have been test fired.[92]
 
-[TYM] [Option Start] When fildes represents a typed memory object opened with either the POSIX_TYPED_MEM_ALLOCATE flag or the POSIX_TYPED_MEM_ALLOCATE_CONTIG flag, mmap() shall, if there are enough resources available, map len bytes allocated from the corresponding typed memory object which were not previously allocated to any process in any processor that may access that typed memory object. If there are not enough resources available, the function shall fail. If fildes represents a typed memory object opened with the POSIX_TYPED_MEM_ALLOCATE_CONTIG flag, these allocated bytes shall be contiguous within the typed memory object. If fildes represents a typed memory object opened with the POSIX_TYPED_MEM_ALLOCATE flag, these allocated bytes may be composed of non-contiguous fragments within the typed memory object. If fildes represents a typed memory object opened with neither the POSIX_TYPED_MEM_ALLOCATE_CONTIG flag nor the POSIX_TYPED_MEM_ALLOCATE flag, len bytes starting at offset off within the typed memory object are mapped, exactly as when mapping a file or shared memory object. In this case, if two processes map an area of typed memory using the same off and len values and using file descriptors that refer to the same memory pool (either from the same port or from a different port), both processes shall map the same region of storage. [Option End]
+Falcon launch vehicles[edit]
+Main article: Falcon (rocket family)
 
-When MAP_FIXED is set in the flags argument, the implementation is informed that the value of pa shall be addr, exactly. If MAP_FIXED is set, mmap() may return MAP_FAILED and set errno to [EINVAL]. If a MAP_FIXED request is successful, the mapping established by mmap() replaces any previous mappings for the process' pages in the range [pa,pa+len).
+The Falcon 1 prototype at SpaceX's assembly facilities.
+Since 2010, SpaceX has flown all its missions on the Falcon 9. They are also actively developing the Falcon Heavy, and previously developed and flew the Falcon 1 pathfinder vehicle.
 
-When MAP_FIXED is not set, the implementation uses addr in an implementation-defined manner to arrive at pa. The pa so chosen shall be an area of the address space that the implementation deems suitable for a mapping of len bytes to the file. All implementations interpret an addr value of 0 as granting the implementation complete freedom in selecting pa, subject to constraints described below. A non-zero value of addr is taken to be a suggestion of a process address near which the mapping should be placed. When the implementation selects a value for pa, it never places a mapping at address 0, nor does it replace any extant mapping.
 
-The off argument is constrained to be aligned and sized according to the value returned by sysconf() when passed _SC_PAGESIZE or _SC_PAGE_SIZE. When MAP_FIXED is specified, the application shall ensure that the argument addr also meets these constraints. The implementation performs mapping operations over whole pages. Thus, while the argument len need not meet a size or alignment constraint, the implementation shall include, in any mapping operation, any partial page specified by the range [pa,pa+len).
+From left to right, Falcon 1, Falcon 9 v1.0, three versions of Falcon 9 v1.1, three versions of Falcon 9 v1.2 (Full Thrust), and Falcon Heavy.
+Falcon 1 was a small rocket capable of placing several hundred kilograms into low earth orbit.[87] It functioned as an early test-bed for developing concepts and components for the larger Falcon 9.[87] Falcon 1 attempted five flights between 2006 and 2009. On September 28, 2008, on its fourth attempt, the Falcon 1 successfully reached orbit, becoming the first privately funded, liquid-fueled rocket to do so.[93]
 
-The system shall always zero-fill any partial page at the end of an object. Further, the system shall never write out any modified portions of the last page of an object which are beyond its end. [MPR] [Option Start]  References within the address range starting at pa and continuing for len bytes to whole pages following the end of an object shall result in delivery of a SIGBUS signal. [Option End]
+Falcon 9 is an EELV-class medium-lift vehicle capable of delivering up to 22,800 kilograms (50,265 lb) to orbit, and is intended to compete with the Delta IV and the Atlas V rockets, as well as other launch providers around the world. It has nine Merlin engines in its first stage.[94] The Falcon 9 v1.0 rocket successfully reached orbit on its first attempt on June 4, 2010. Its third flight, COTS Demo Flight 2, launched on May 22, 2012, and was the first commercial spacecraft to reach and dock with the International Space Station.[95] The vehicle was upgraded to Falcon 9 v1.1 in 2013 and again in 2015 to the current Falcon 9 Full Thrust version. As of March 2017, Falcon 9 vehicles have flown 30 successful missions with two failures, one after launch and the other during fueling for a routine pre-launch static fire.
 
-An implementation may generate SIGBUS signals when a reference would cause an error in the mapped object, such as out-of-space condition.
+In 2011, SpaceX began development of the Falcon Heavy, a heavy-lift rocket configured using a cluster of three Falcon 9 first stage cores with a total 27 Merlin 1D engines and propellant crossfeed.[96][97] The first stage would be capable of lifting 63,957 kilograms (141,100 lb) to LEO with the 27 Merlin 1D engines producing 22,819kN of thrust at sea level, and 24,681 kN in space.[98] When SpaceX finishes development and the rocket is launched, the Falcon Heavy will be the world's most powerful rocket in operation.[99] SpaceX is aiming for the first demonstration flight of the Falcon Heavy in January 2018, delivering a payload consisting of Musk's personal Tesla Roadster (playing Space Oddity, by David Bowie) into Mars orbit.[100]
 
-The mmap() function shall add an extra reference to the file associated with the file descriptor fildes which is not removed by a subsequent close() on that file descriptor. This reference shall be removed when there are no more mappings to the file.
+Dragon capsules[edit]
 
-The st_atime field of the mapped file may be marked for update at any time between the mmap() call and the corresponding munmap() call. The initial read or write reference to a mapped region shall cause the file's st_atime field to be marked for update if it has not already been marked for update.
+The Dragon spacecraft approaching the ISS.
+Main article: SpaceX Dragon
+In 2005, SpaceX announced plans to pursue a human-rated commercial space program through the end of the decade.[101] The Dragon is a conventional blunt-cone ballistic capsule which is capable of carrying cargo or up to seven astronauts into orbit and beyond.[102][102]
 
-The st_ctime and st_mtime fields of a file that is mapped with MAP_SHARED and PROT_WRITE shall be marked for update at some point in the interval between a write reference to the mapped region and the next call to msync() with MS_ASYNC or MS_SYNC for that portion of the file by any process. If there is no such call and if the underlying file is modified as a result of a write reference, then these fields shall be marked for update at some time after the write reference.
+In 2006, NASA announced that the company was one of two selected to provide crew and cargo resupply demonstration contracts to the ISS under the COTS program.[103] SpaceX demonstrated cargo resupply and eventually crew transportation services using the Dragon.[95] The first flight of a Dragon structural test article took place in June 2010, from Launch Complex 40 at Cape Canaveral Air Force Station during the maiden flight of the Falcon 9 launch vehicle; the mock-up Dragon lacked avionics, heat shield, and other key elements normally required of a fully operational spacecraft but contained all the necessary characteristics to validate the flight performance of the launch vehicle.[104] An operational Dragon spacecraft was launched in December 2010 aboard COTS Demo Flight 1, the Falcon 9's second flight, and safely returned to Earth after two orbits, completing all its mission objectives.[88] In 2012, Dragon became the first commercial spacecraft to deliver cargo to the International Space Station,[95] and has since been conducting regular resupply services to the ISS.[105]
 
-There may be implementation-defined limits on the number of memory regions that can be mapped (per process or per system).
 
-[XSI] [Option Start] If such a limit is imposed, whether the number of memory regions that can be mapped by a process is decreased by the use of shmat() is implementation-defined. [Option End]
+The interior of the COTS 2 Dragon.
+In 2009 and 2010, Musk suggested on several occasions that plans for a human-rated variant of Dragon were proceeding and had a 2- to 3-year time line to completion.[106][107] In April 2011, NASA issued a $75 million contract, as part of its second-round commercial crew development (CCDev) program, for SpaceX to develop an integrated launch escape system for Dragon in preparation for human-rating it as a crew transport vehicle to the ISS.[108] This Space Act Agreement runs from April 2011 until May 2012, when the next round of contracts are to be awarded.[108] NASA approved the technical plans for the system in October 2011, and SpaceX began building prototype hardware.[109]
 
-If mmap() fails for reasons other than [EBADF], [EINVAL], or [ENOTSUP], some of the mappings in the address range starting at addr and continuing for len bytes may have been unmapped.
+SpaceX plans to launch its Dragon 2 spacecraft on an unmanned test flight to the ISS in November 2017, and later in 2018, a crewed Dragon will send US astronauts to the ISS for the first time since the retirement of the Space Shuttle. In February 2017 SpaceX announced that two would-be space tourists had put down "significant deposits" for a mission which would see the two private astronauts fly on board a Dragon capsule to the moon and back again. At the press conference announcing the mission Elon Musk said that the cost of the mission would be "comparable" to that of sending an astronaut to the International Space Station; about $70 million US dollars per astronaut in 2017.[19] The mission is slated for late 2018.[110]
 
-RETURN VALUE
-Upon successful completion, the mmap() function shall return the address at which the mapping was placed ( pa); otherwise, it shall return a value of MAP_FAILED and set errno to indicate the error. The symbol MAP_FAILED is defined in the <sys/mman.h> header. No successful return from mmap() shall return the value MAP_FAILED.
+In addition to SpaceX's privately funded plans for an eventual Mars mission, NASA Ames Research Center had developed a concept called Red Dragon: a low-cost Mars mission that would use Falcon Heavy as the launch vehicle and trans-Martian injection vehicle, and the Dragon capsule to enter the Martian atmosphere. The concept was originally envisioned for launch in 2018 as a NASA Discovery mission, then alternatively for 2022, but as of September 2015 it has not been yet formally submitted for funding within NASA.[111] The objectives of the mission would be return the samples from Mars to Earth at a fraction of the cost of the NASA own return-sample mission now projected at 6 billion dollars.[111] In April 2016, SpaceX announced its plan to launch a modified Dragon lander to Mars by 2018. This project is part of a public-private partnership contract between NASA and SpaceX. In early 2017, SpaceX has pushed the mission to the 2020 launch window to have more time to dedicate to other projects such as the Falcon Heavy and the Dragon 2 (Crew Dragon) spacecraft.[112] Later in 2017 cancellation of Red Dragon was announced; SpaceX will concentrate on landing a much larger ship on Mars [113].
 
-ERRORS
-The mmap() function shall fail if:
+In September 2017 it has been reported that SpaceX has completed testing on the first stage cores for its Falcon Heavy rocket.[114]
 
-[EACCES]
-The fildes argument is not open for read, regardless of the protection specified, or fildes is not open for write and PROT_WRITE was specified for a MAP_SHARED type mapping.
-[EAGAIN]
-[ML] [Option Start] The mapping could not be locked in memory, if required by mlockall(), due to a lack of resources. [Option End]
-[EBADF]
-The fildes argument is not a valid open file descriptor.
-[EINVAL]
-The value of len is zero.
-[EINVAL]
-The addr argument (if MAP_FIXED was specified) or off is not a multiple of the page size as returned by sysconf(), or is considered invalid by the implementation.
-[EINVAL]
-The value of flags is invalid (neither MAP_PRIVATE nor MAP_SHARED is set).
-[EMFILE]
-The number of mapped regions would exceed an implementation-defined limit (per process or per system).
-[ENODEV]
-The fildes argument refers to a file whose type is not supported by mmap().
-[ENOMEM]
-MAP_FIXED was specified, and the range [addr,addr+len) exceeds that allowed for the address space of a process; or, if MAP_FIXED was not specified and there is insufficient room in the address space to effect the mapping.
-[ENOMEM]
-[ML] [Option Start] The mapping could not be locked in memory, if required by mlockall(), because it would require more space than the system is able to supply. [Option End]
-[ENOMEM]
-[TYM] [Option Start] Not enough unallocated memory resources remain in the typed memory object designated by fildes to allocate len bytes. [Option End]
-[ENOTSUP]
-MAP_FIXED or MAP_PRIVATE was specified in the flags argument and the implementation does not support this functionality.
-The implementation does not support the combination of accesses requested in the prot argument.
+Research and development[edit]
 
-[ENXIO]
-Addresses in the range [off,off+len) are invalid for the object specified by fildes.
-[ENXIO]
-MAP_FIXED was specified in flags and the combination of addr, len, and off is invalid for the object specified by fildes.
-[ENXIO]
-[TYM] [Option Start] The fildes argument refers to a typed memory object that is not accessible from the calling process. [Option End]
-[EOVERFLOW]
-The file is a regular file and the value of off plus len exceeds the offset maximum established in the open file description associated with fildes.
-The following sections are informative.
-EXAMPLES
-None.
+First test firing of a scale Raptor development engine in September 2016 in McGregor, Texas.
+SpaceX is actively pursuing several different research and development programs. Most notable are the programs intended to develop reusable launch vehicles, an interplanetary transport system, and a global telecommunications network.
 
-APPLICATION USAGE
-Use of mmap() may reduce the amount of memory available to other memory allocation functions.
+SpaceX has on occasion developed new engineering development technologies to enable it to pursue its various goals. For example, at the 2015 GPU Technology Conference, SpaceX revealed their own computational fluid dynamics (CFD) software to improve the simulation capability of evaluating rocket engine combustion design.[115][116]
 
-Use of MAP_FIXED may result in unspecified behavior in further use of malloc() and shmat(). The use of MAP_FIXED is discouraged, as it may prevent an implementation from making the most effective use of resources.
+Reusable launch system[edit]
 
-The application must ensure correct synchronization when using mmap() in conjunction with any other file access method, such as read() and write(), standard input/output, and shmat().
+Autonomous spaceport drone ship in position prior to Falcon 9 Flight 17 carrying CRS-6.
+Main articles: SpaceX reusable launch system development program and Falcon 9 first-stage landing tests
+SpaceX's reusable launcher program was publicly announced in 2011 and the design phase was completed in February 2012. The system returns the first stage of a Falcon 9 rocket to its launchpad using only its own propulsion systems.[117]
 
-The mmap() function allows access to resources via address space manipulations, instead of read()/ write(). Once a file is mapped, all a process has to do to access it is use the data at the address to which the file was mapped. So, using pseudo-code to illustrate the way in which an existing program might be changed to use mmap(), the following:
+SpaceX's active test program began in late 2012 with testing low-altitude, low-speed aspects of the landing technology. Grasshopper and the Falcon 9 Reusable Development Vehicles (F9R Dev) were experimental technology-demonstrator reusable rockets that performed vertical takeoffs and landings. DragonFly is a test vehicle to develop propulsive and propulsive-assist landing technologies in a series of low-altitude flight tests planned to be conducted in 2015–2016.[118]
 
-fildes = open(...)
-lseek(fildes, some_offset)
-read(fildes, buf, len)
-/* Use data in buf. */
+High-velocity, high-altitude aspects of the booster atmospheric return technology began testing in late 2013 and have continued through 2016. SpaceX has been improving the autonomous landing and recovery of the first stage of the Falcon 9 launch vehicle, with steadily increasing success. As a result of Elon Musk's goal of crafting more cost-effective launch vehicles, SpaceX conceived a method to reuse the first stage of their primary rocket, the Falcon 9,[119] by attempting propulsive vertical landings on solid surfaces. Once the company determined that soft landings were feasible by touching down over the Atlantic and Pacific Ocean, they began landing attempts on a solid platform. SpaceX leased and modified several barges to sit out at sea as a target for the returning first stage, converting them to autonomous spaceport drone ships (ASDS). SpaceX first achieved a successful landing and recovery of a first stage in December 2015,[120] and in April 2016, the first stage booster first successfully landed on the ASDS Of Course I Still Love You.[121][122]
 
-becomes:
+SpaceX continues to carry out first stage landings on every orbital launch that fuel margins allow. By October 2016, following the successful landings, SpaceX indicated they were offering their customers a ten percent price discount if they choose to fly their payload on a reused Falcon 9 first stage.[123] On March 30, 2017, SpaceX launched a "flight-proven" Falcon 9 for the SES-10 mission. This was the first time a re-launch of a payload-carrying orbital rocket went back to space.[124][58] The first stage was recovered and landed on the ASDS Of Course I Still Love You in the Atlantic Ocean, also making it the first landing of a reused orbital class rocket. Elon Musk called the achievement an "incredible milestone in the history of space."[125][126]
 
-fildes = open(...)
-address = mmap(0, len, PROT_READ, MAP_PRIVATE, fildes, some_offset)
-/* Use data at address. */
+Interplanetary Transport System[edit]
 
-RATIONALE
-After considering several other alternatives, it was decided to adopt the mmap() definition found in SVR4 for mapping memory objects into process address spaces. The SVR4 definition is minimal, in that it describes only what has been built, and what appears to be necessary for a general and portable mapping facility.
+Artist's impression of the Interplanetary Spaceship on the Jovian moon Europa.
+Main article: Interplanetary Transport System
+SpaceX is developing a super-heavy lift launch vehicle—the ITS launch vehicle—a fully reusable booster stage and integrated second-stage/spacecraft—Interplanetary Spaceship and ITS tanker—to support flights to interplanetary space.[127] Development of the Interplanetary Transport System and its super-heavy launch vehicle will be the major focus of SpaceX once Falcon Heavy and DragonCrew are flying regularly.[128] The ITS architecture was announced by Elon Musk during the 67th International Astronautical Congress in September, 2016. The next iteration, with a scaled down and more affordable spacecraft, is expected to be out at the next IAC in September, 2017.
 
-Note that while mmap() was first designed for mapping files, it is actually a general-purpose mapping facility. It can be used to map any appropriate object, such as memory, files, devices, and so on, into the address space of a process.
+SpaceX has signaled on multiple occasions that it is interested in developing much larger engines than it has done to date. A conceptual plan for the Raptor project was first unveiled in a June 2009 AIAA presentation.[129] In November 2012, Musk announced a new direction for propulsion side of the company: developing LOX/methane rocket engines for launch vehicle main and upper stages.[130] The Raptor LOX/methane engine will use the more efficient staged combustion cycle,[131] a departure from the open cycle gas generator cycle system and LOX/RP-1 propellants that the current Merlin 1 engine series uses."[131] The rocket would be more powerful than previously released publicly, with over 1,000,000 lbf (4,400 kN) of thrust.[132] The Raptor engine will likely be the first in a family of methane-based engines SpaceX intends to build.[133] In August 2016, a Raptor engine was shipped to the McGregor testing facility in Texas, where it is undergoing development testing.[134]
 
-When a mapping is established, it is possible that the implementation may need to map more than is requested into the address space of the process because of hardware requirements. An application, however, cannot count on this behavior. Implementations that do not use a paged architecture may simply allocate a common memory region and return the address of it; such implementations probably do not allocate any more than is necessary. References past the end of the requested area are unspecified.
+Musk's long term vision for the company is the development of technology and resources suitable for human colonization on Mars. He has expressed his interest in someday traveling to the planet, stating "I'd like to die on Mars, just not on impact."[135] A rocket every two years or so could provide a base for the people arriving in 2025 after a launch in 2024.[136][137] According to Steve Jurvetson, Musk believes that by 2035 at the latest, there will be thousands of rockets flying a million people to Mars, in order to enable a self-sustaining human colony.[citation needed]
 
-If an application requests a mapping that would overlay existing mappings in the process, it might be desirable that an implementation detect this and inform the application. However, the default, portable (not MAP_FIXED) operation does not overlay existing mappings. On the other hand, if the program specifies a fixed address mapping (which requires some implementation knowledge to determine a suitable address, if the function is supported at all), then the program is presumed to be successfully managing its own address space and should be trusted when it asks to map over existing data structures. Furthermore, it is also desirable to make as few system calls as possible, and it might be considered onerous to require an munmap() before an mmap() to the same address range. This volume of IEEE Std 1003.1-2001 specifies that the new mappings replace any existing mappings, following existing practice in this regard.
+In September 2017, Elon Musk provided a revised architecture, designated, as BFR, with a smaller (9 m) diameter booster and spacecraft.
 
-It is not expected, when the Memory Protection option is supported, that all hardware implementations are able to support all combinations of permissions at all addresses. When this option is supported, implementations are required to disallow write access to mappings without write permission and to disallow access to mappings without any access permission. Other than these restrictions, implementations may allow access types other than those requested by the application. For example, if the application requests only PROT_WRITE, the implementation may also allow read access. A call to mmap() fails if the implementation cannot support allowing all the access requested by the application. For example, some implementations cannot support a request for both write access and execute access simultaneously. All implementations supporting the Memory Protection option must support requests for no access, read access, write access, and both read and write access. Strictly conforming code must only rely on the required checks. These restrictions allow for portability across a wide range of hardware.
+Other projects[edit]
+Main articles: SpaceX satellite constellation and Hyperloop pod competition
+In January 2015, SpaceX CEO Elon Musk announced the development of a new satellite constellation to provide global broadband internet service. In June 2015 the company asked the federal government for permission to begin testing for a project that aims to build a constellation of 4,000 satellites capable of beaming the Internet to the entire globe, including remote regions which currently do not have internet access.[138][139] The internet service will use a constellation of 4,000 cross-linked communications satellites in 1,100 km orbits. Owned and operated by SpaceX, the goal of the business is to increase profitability and cashflow, to allow SpaceX to build its Mars colony.[140] Development began in 2015, initial prototype test-flight satellites are expected to be flown in 2017, and initial operation of the constellation could begin as early as 2020. As of March 2017, SpaceX filed with the US regulatory authorities plans to field a constellation of an additional 7,518 "V-band satellites in non-geosynchronous orbits to provide communications services" in an electromagnetic spectrum that had not previously been "heavily employed for commercial communications services". Called the "V-band low-Earth-orbit (VLEO) constellation", it would consist of "7,518 satellites to follow the [earlier] proposed 4,425 satellites that would function in Ka- and Ku-band".[141]
 
-The MAP_FIXED address treatment is likely to fail for non-page-aligned values and for certain architecture-dependent address ranges. Conforming implementations cannot count on being able to choose address values for MAP_FIXED without utilizing non-portable, implementation-defined knowledge. Nonetheless, MAP_FIXED is provided as a standard interface conforming to existing practice for utilizing such knowledge when it is available.
+In June 2015, SpaceX announced that they would sponsor a Hyperloop competition, and would build a 1-mile-long (1.6 km) subscale test track near SpaceX's headquarters for the competitive events, which could be held as early as June 2016.[142][143] The plan was later delayed to January 2017, as there were many requests from teams for more time designing and building their pods.[144]
 
-Similarly, in order to allow implementations that do not support virtual addresses, support for directly specifying any mapping addresses via MAP_FIXED is not required and thus a conforming application may not count on it.
+Infrastructure[edit]
 
-The MAP_PRIVATE function can be implemented efficiently when memory protection hardware is available. When such hardware is not available, implementations can implement such "mappings" by simply making a real copy of the relevant data into process private memory, though this tends to behave similarly to read().
+The company's headquarters, located in Hawthorne, California.
+SpaceX is headquartered in California, which also serves as their primary manufacturing plant. They own a test site in Texas, and operate three current launch sites, with another under development. SpaceX also run regional offices in Texas, Virginia, and Washington, D.C.[41] and a satellite development facility in Seattle.[145]
 
-The function has been defined to allow for many different models of using shared memory. However, all uses are not equally portable across all machine architectures. In particular, the mmap() function allows the system as well as the application to specify the address at which to map a specific region of a memory object. The most portable way to use the function is always to let the system choose the address, specifying NULL as the value for the argument addr and not to specify MAP_FIXED.
+Headquarters and manufacturing plant[edit]
 
-If it is intended that a particular region of a memory object be mapped at the same address in a group of processes (on machines where this is even possible), then MAP_FIXED can be used to pass in the desired mapping address. The system can still be used to choose the desired address if the first such mapping is made without specifying MAP_FIXED, and then the resulting mapping address can be passed to subsequent processes for them to pass in via MAP_FIXED. The availability of a specific address range cannot be guaranteed, in general.
+Falcon 9 v1.1 rocket cores under construction at the SpaceX Hawthorne facility, November 2014.
+SpaceX Headquarters is located in the Los Angeles suburb of Hawthorne, California. The large three-story facility, originally built by Northrop Corporation to build Boeing 747 fuselages,[146] houses SpaceX's office space, mission control, and vehicle factory. The area has one of the largest concentrations of aerospace headquarters, facilities, and/or subsidiaries in the U.S., including Boeing/McDonnell Douglas main satellite building campuses, Raytheon, NASA's Jet Propulsion Laboratory, Lockheed Martin, BAE Systems, Northrop Grumman, and AECOM, etc., with a large pool of aerospace engineers and recent college engineering graduates.[146]
 
-The mmap() function can be used to map a region of memory that is larger than the current size of the object. Memory access within the mapping but beyond the current end of the underlying objects may result in SIGBUS signals being sent to the process. The reason for this is that the size of the object can be manipulated by other processes and can change at any moment. The implementation should tell the application that a memory reference is outside the object where this can be detected; otherwise, written data may be lost and read data may not reflect actual data in the object.
+SpaceX utilizes a high degree of vertical integration in the production of its rockets and rocket engines.[26] SpaceX builds its rocket engines, rocket stages, spacecraft, principal avionics and all software in-house in their Hawthorne facility, which is unusual for the aerospace industry. Nevertheless, SpaceX still has over 3,000 suppliers with some 1,100 of those delivering to SpaceX nearly weekly.[147]
 
-Note that references beyond the end of the object do not extend the object as the new end cannot be determined precisely by most virtual memory hardware. Instead, the size can be directly manipulated by ftruncate().
+Development and test facility[edit]
 
-Process memory locking does apply to shared memory regions, and the MEMLOCK_FUTURE argument to mlockall() can be relied upon to cause new shared memory regions to be automatically locked.
+SpaceX McGregor engine test bunker, September 2012.
+Main article: SpaceX Rocket Development and Test Facility
+SpaceX operates their Rocket Development and Test Facility in McGregor, Texas. All SpaceX rocket engines are tested on rocket test stands, and low-altitude VTVL flight testing of the Falcon 9 Grasshopper v1.0 and F9R Dev1 test vehicles were carried out at McGregor.
 
-Existing implementations of mmap() return the value -1 when unsuccessful. Since the casting of this value to type void * cannot be guaranteed by the ISO C standard to be distinct from a successful value, this volume of IEEE Std 1003.1-2001 defines the symbol MAP_FAILED, which a conforming implementation does not return as the result of a successful call.
+The company purchased the McGregor facilities from Beal Aerospace, where it refitted the largest test stand for Falcon 9 engine testing. SpaceX has made a number of improvements to the facility since purchase, and has also extended the acreage by purchasing several pieces of adjacent farmland. In 2011, the company announced plans to upgrade the facility for launch testing a VTVL rocket,[48] and then constructed a half-acre concrete launch facility in 2012 to support the Grasshopper test flight program.[49] As of October 2012, the McGregor facility has seven test stands that are operated "18 hours a day, six days a week"[148] and is building more test stands because production is ramping up and the company has a large manifest in the next several years.
 
-FUTURE DIRECTIONS
-None.
+In addition to routine testing, Dragon capsules (following recovery after an orbital mission), are shipped to McGregor for de-fueling, cleanup, and refurbishment for reuse in future missions.
 
-SEE ALSO
-exec(), fcntl(), fork(), lockf(), msync(), munmap(), mprotect(), posix_typed_mem_open(), shmat(), sysconf(), the Base Definitions volume of IEEE Std 1003.1-2001, <sys/mman.h>
+Launch facilities[edit]
+Main article: SpaceX launch facilities
 
-CHANGE HISTORY
-First released in Issue 4, Version 2.
+SpaceX west coast launch facility at Vandenberg Air Force Base, during the launch of CASSIOPE, September 2013.
+SpaceX currently operates three orbital launch sites, at Cape Canaveral, Vandenberg Air Force Base, and Kennedy Space Center, and have announced plans for a fourth in Brownsville, Texas. SpaceX has indicated that they see a niche for each of the four orbital facilities and that they have sufficient launch business to fill each pad.[149] Before it was retired, all Falcon 1 launches took place at the Ronald Reagan Ballistic Missile Defense Test Site on Omelek Island.
 
-Issue 5
-Moved from X/OPEN UNIX extension to BASE.
+Cape Canaveral[edit]
+Cape Canaveral Air Force Station Space Launch Complex 40 (SLC-40) is used for Falcon 9 launches to low Earth and geostationary orbits. SLC-40 is not capable of supporting Falcon Heavy launches, or polar launches. As part of SpaceX's booster reusability program, the former Launch Complex 13 at Cape Canaveral, now renamed Landing Zone 1, has been designated for use for Falcon 9 first-stage booster landings.
 
-Aligned with mmap() in the POSIX Realtime Extension as follows:
 
-The DESCRIPTION is extensively reworded.
+Falcon 9 Flight 20 landing on Landing Zone 1 in December 2015.
+Vandenberg[edit]
+Vandenberg Air Force Base Space Launch Complex 4 East (SLC-4E) is used for payloads to polar orbits. The Vandenberg site can launch both Falcon 9 and Falcon Heavy,[150] but cannot launch to low inclination orbits. Post-launch landings will take place at the neighboring SLC-4W.
 
-The [EAGAIN] and [ENOTSUP] mandatory error conditions are added.
+Kennedy Space Center[edit]
+Kennedy Space Center Launch Complex 39A (LC39A) has been under development by SpaceX since December 2013, when NASA announced that they had selected SpaceX as the new commercial tenant.[151] SpaceX plans to launch their Falcon 9 and Falcon Heavy from the pad and build a new hangar near it.[152][153][154] Elon Musk has stated that he wants to shift most of SpaceX's NASA launches to LC39A, including Commercial Cargo and Crew missions to the ISS.[151][155]
 
-New cases of [ENOMEM] and [ENXIO] are added as mandatory error conditions.
+Brownsville[edit]
+In August 2014, SpaceX announced they would be building a commercial-only launch facility at Brownsville, Texas.[156][157] The Federal Aviation Administration released a draft Environmental Impact Statement for the proposed Texas facility in April 2013, and "found that 'no impacts would occur' that would force the Federal Aviation Administration to deny SpaceX a permit for rocket operations,"[158][158] and issued the permit in July 2014.[159] SpaceX started construction on the new launch facility in 2014 with production ramping up in the latter half of 2015,[160] with the first launches from the facility no earlier than late 2018.[161] Real estate packages at the location have been named by SpaceX with names based on the theme "Mars Crossing".[162][163]
 
-The value returned on failure is the value of the constant MAP_FAILED; this was previously defined as -1.
+Satellite prototyping facility[edit]
+For more details on this topic, see SpaceX satellite constellation.
+In January 2015, SpaceX announced it would be entering the satellite production business and global satellite internet business. The satellite factory would be located in Seattle, Washington. The office will initially have approximately 60 engineers, with the potential to grow to 1,000 over several years. In July 2016, SpaceX acquired an additional 740 square meters (8,000 sq ft) creative space in Irvine, California (Orange County) to focus on satellite communications.[164]
 
-Large File Summit extensions are added.
+Launch contracts[edit]
+For more details on this topic, see List of Falcon 9 and Falcon Heavy launches.
+SpaceX has been contracted by NASA to initially develop the technology and subsequently carry out the task of resupplying the International Space Station (ISS). SpaceX is also certified for US military launches of Evolved Expendable Launch Vehicle-class (EELV) payloads. In addition to this, SpaceX has (as of January 2013) a purely commercial launch manifest of "23 missions scheduled over the next 4 years, exclusive of US government flights," of a total of 40 flights scheduled through 2017."[165] In September 2015, SpaceX stated that they had over 60 missions on manifest representing over $7B under contract.[166]
 
-Issue 6
-The mmap() function is marked as part of the Memory Mapped Files option.
+NASA contracts[edit]
+COTS[edit]
 
-The Open Group Corrigendum U028/6 is applied, changing (void *)-1 to MAP_FAILED.
+The COTS 2 Dragon is berthed to the ISS by Canadarm2.
+Main article: Commercial Orbital Transportation Services
+In 2006, NASA announced that SpaceX had won a NASA Commercial Orbital Transportation Services (COTS) contract to demonstrate cargo delivery to the ISS, with a possible option for crew transport.[167] This contract, designed by NASA to provide "seed money" for developing new boosters, paid SpaceX $278 million to develop the Falcon 9.[168] In December 2010, the launch of the COTS Demo Flight 1 mission, SpaceX became the first privately funded company to successfully launch, orbit and recover a spacecraft.[169] Dragon was successfully deployed into orbit, circled the Earth twice, and then made a controlled re-entry burn for a splashdown in the Pacific Ocean.[170] With Dragon's safe recovery, SpaceX became the first private company to launch, orbit, and recover a spacecraft; prior to this mission, only government agencies had been able to recover orbital spacecraft.[170] COTS Demo Flight 2 launched in May 2012, in which Dragon successfully berthed with the ISS, marking the first time that a private spacecraft had accomplished this feat.[171][172]
 
-The following new requirements on POSIX implementations derive from alignment with the Single UNIX Specification:
+Commercial cargo[edit]
+Main article: Commercial Resupply Services
+Commercial Resupply Services (CRS) are a series of contracts awarded by NASA from 2008–2016 for delivery of cargo and supplies to the ISS on commercially operated spacecraft. The first CRS contracts were signed in 2008 and awarded $1.6 billion to SpaceX for 12 cargo transport missions, covering deliveries to 2016.[173] SpaceX CRS-1, the first of the 12 planned resupply missions, launched in October 2012, achieved orbit, berthed and remained on station for 20 days, before re-entering the atmosphere and splashing down in the Pacific Ocean.[174] CRS missions have flown approximately twice a year to the ISS since then. In 2015, NASA extended the Phase 1 contracts by ordering an additional three resupply flights from SpaceX.[175][176] After further extensions late in 2015, SpaceX is currently scheduled to fly a total of 20 missions.[177] A second phase of contracts (known as CRS2) were solicited and proposed in 2014. They were awarded in January 2016, for cargo transport flights beginning in 2019 and expected to last through 2024.
 
-The DESCRIPTION is updated to describe the use of MAP_FIXED.
+Commercial crew[edit]
 
-The DESCRIPTION is updated to describe the addition of an extra reference to the file associated with the file descriptor passed to mmap().
+Crew Dragon undergoing testing prior to flight.
+Main article: Commercial Crew Development
+The Commercial Crew Development (CCDev) program intends to develop commercially operated spacecraft that are capable of delivering astronauts to the ISS. SpaceX did not win a Space Act Agreement in the first round (CCDev 1), but during the second round (CCDev 2), NASA awarded SpaceX with a contract worth $75 million to further develop their launch escape system, test a crew accommodations mock-up, and to further progress their Falcon/Dragon crew transportation design.[109][178][179] The CCDev program later became Commercial Crew Integrated Capability (CCiCap), and in August 2012, NASA announced that SpaceX had been awarded $440 million to continue development and testing of its Dragon 2 spacecraft.[180][181]
 
-The DESCRIPTION is updated to state that there may be implementation-defined limits on the number of memory regions that can be mapped.
+In September 2014, NASA chose SpaceX and Boeing as the two companies that will be funded to develop systems to transport U.S. crews to and from the ISS. SpaceX won $2.6 billion to complete and certify Dragon 2 by 2017. The contracts include at least one crewed flight test with at least one NASA astronaut aboard. Once Crew Dragon achieves NASA certification, the contract requires SpaceX to conduct at least two, and as many as six, crewed missions to the space station.[182]
 
-The DESCRIPTION is updated to describe constraints on the alignment and size of the off argument.
+2015 rocket explosion and NASA's public response[edit]
+In June 2015, in a contract with NASA, SpaceX launched a rocket to resupply the international space station. However, the rocket blew up. The failure cost taxpayers $110 million for the rocket, and the company received 80% of its expected payment after the failure of the mission.[183]
 
-The [EINVAL] and [EMFILE] error conditions are added.
+After the explosion, NASA promised the public that there would be a summary of the investigation released. However, in mid August 2017, NASA announced that it no longer needed to release the investigation to the public because it "is not required to complete a formal final report public summary since it was an FAA licensed flight."[183] NASA’s lack of the release of information to the public was different than its public information response to a similar rocket explosion. In October 2014, Orbital Sciences’ rocket blew up (at a cost of $51 million from the taxpayers). That flight also was an FAA licensed flight and was conducted under the same commercial resupply service program of which SpaceX is a part; both scenarios also involved "aging rockets." However, NASA put out an executive summary to the public for the Orbital incident.[183]
 
-The [EOVERFLOW] error condition is added. This change is to support large files.
+Congressman Lamar Smith (R-TX), who is the chairman of the House Committee on Science, Space, and Technology, noticed the discrepancy and in response wrote a letter to NASA stating his belief that the "discrepancy … raises questions about not only the equity and fairness of NASA’s process for initiating independent accident investigations, but also the fidelity of the investigations themselves."[183] Smith proposed that SpaceX was receiving preferential treatment.[184]
 
-The following changes are made for alignment with the ISO POSIX-1:1996 standard:
+Defense contracts[edit]
+In 2005, SpaceX announced that it had been awarded an Indefinite Delivery/Indefinite Quantity (IDIQ) contract for Responsive Small Spacelift (RSS) launch services by the United States Air Force, which could allow the Air Force to purchase up to $100 million worth of launches from the company.[185] In April 2008, NASA announced that it had awarded an IDIQ Launch Services contract to SpaceX for up to $1 billion, depending on the number of missions awarded. The contract covers launch services ordered by June 2010, for launches through December 2012.[186] Musk stated in the same 2008 announcement that SpaceX has sold 14 contracts for flights on the various Falcon vehicles.[186] In December 2012, SpaceX announced its first two launch contracts with the United States Department of Defense. The United States Air Force Space and Missile Systems Center awarded SpaceX two EELV-class missions: Deep Space Climate Observatory (DSCOVR) and Space Test Program 2 (STP-2). DSCOVR was launched on a Falcon 9 launch vehicle in 2015, while STP-2 will be launched on a Falcon Heavy in 2017.[187]
 
-The DESCRIPTION is updated to describe the cases when MAP_PRIVATE and MAP_FIXED need not be supported.
+In May 2015, the United States Air Force announced that the Falcon 9 v1.1 was certified for launching "national security space missions," which allows SpaceX to contract launch services to the Air Force for any payloads classified under national security.[188] In April 2016, the U.S. Air Force awarded the first such national security launch, an $82.7 million contract to SpaceX to launch a GPS satellite in May 2018; this estimated cost was approximately 40% less than the estimated cost for similar previous missions.[189][190] In April 2016, the Pentagon announced that SpaceX has been awarded an $82.7 million contract from the U.S. Air Force to launch a next-generation GPS satellite aboard its Falcon 9 rocket in May 2018.[191] Prior to this, United Launch Alliance was the only provider certified to launch national security payloads.[192][192][193]
 
-The following changes are made for alignment with IEEE Std 1003.1j-2000:
+Commercial contracts[edit]
 
-Semantics for typed memory objects are added to the DESCRIPTION.
+The Falcon 9 carrying the SES-8 communications satellite into orbit.
+SpaceX announced in March 2010, that it had been contracted to launch SES-8, a telecommunications satellite for SES S.A.; it was successfully launched in December 2013.[194] SES-8 was SpaceX's first launch of a geostationary comsat, signalling its entrance into the lucrative commercial launch market.[43][43][194] In June 2010, SpaceX was awarded the largest-ever commercial launch contract, worth $492 million, to launch Iridium satellites using Falcon 9 rockets.[195] As of December 2013, SpaceX had a total of 50 future launches under contract; two-thirds of them for commercial customers.[42]
 
-New [ENOMEM] and [ENXIO] errors are added to the ERRORS section.
+Launch market competition and pricing pressure[edit]
+Main article: Space launch market competition
+SpaceX's low launch prices, especially for communication satellites flying to geostationary (GTO) orbit, have resulted in market pressure on its competitors to lower their own prices.[26] Prior to 2013, the openly competed comsat launch market had been dominated by Arianespace (flying Ariane 5) and International Launch Services (flying Proton).[196] With a published price of US$56.5 million per launch to low Earth orbit, "Falcon 9 rockets [were] already the cheapest in the industry. Reusable Falcon 9s could drop the price by an order of magnitude, sparking more space-based enterprise, which in turn would drop the cost of access to space still further through economies of scale."[197] SpaceX has publicly indicated that if they are successful with developing the reusable technology, launch prices in the US$5 to 7 million range for the reusable Falcon 9 are possible.[52]
 
-The posix_typed_mem_open() function is added to the SEE ALSO section.
+In 2014, SpaceX had won nine contracts out of 20 that were openly competed worldwide in 2014 at commercial launch service providers.[198] Space media reported that SpaceX had "already begun to take market share" from Arianespace.[199] Arianespace has requested that European governments provide additional subsidies to face the competition from SpaceX.[200][201] European satellite operators are pushing the ESA to reduce Ariane 5 and the future Ariane 6 rocket launch prices as a result of competition from SpaceX. According to one Arianespace managing director in 2015, it was clear that "a very significant challenge [was] coming from SpaceX ... Therefore things have to change ... and the whole European industry is being restructured, consolidated, rationalised and streamlined."[202] Jean Botti, Director of innovation for Airbus (which makes the Ariane 5) warned that "those who don't take Elon Musk seriously will have a lot to worry about."[203] In 2014, no commercial launches were booked to fly on the Russian Proton rocket.[198]
 
-The DESCRIPTION is updated to avoid use of the term "must" for application requirements.
+Also in 2014, SpaceX capabilities and pricing had also begun to affect the market for launch of US military payloads. For nearly a decade the large US launch provider United Launch Alliance (ULA) had faced no competition for military launches.[204] Anticipating a slump in domestic military and spy launches, ULA stated that it would go out of business unless it won commercial satellite launch orders.[205] To that end, ULA announced a major restructuring of processes and workforce in order to decrease launch costs by half.[206][207]
 
-IEEE Std 1003.1-2001/Cor 1-2002, item XSH/TC1/D6/34 is applied, changing the margin code in the SYNOPSIS from MF|SHM to MC3 (notation for MF|SHM|TYM).
-
-IEEE Std 1003.1-2001/Cor 2-2004, item XSH/TC2/D6/60 is applied, updating the DESCRIPTION and ERRORS sections to add the [EINVAL] error when len is zero.
-
-End of informative text.
-UNIX ® is a registered Trademark of The Open Group.
-POSIX ® is a registered Trademark of The IEEE.
-[ Main Index | XBD | XCU | XSH | XRAT ]
+See also[edit]
+	Companies portal
+photo	Los Angeles portal
+	Spaceflight portal
+List of Falcon 9 and Falcon Heavy launches
+Colonization of Mars
+Human mission to Mars
+Interplanetary Transport System
+BFR
+NewSpace
+Private spaceflight
+Tourism on the Moon
+References[edit]
+Jump up ^ "California Business Search (C2414622 - Space Exploration Technologies Corp)". California Secretary of State. Retrieved March 1, 2017.
+Jump up ^ Fred Lambert (November 17, 2016). "Elon Musk's stake in SpaceX is actually worth more than his Tesla shares". Retrieved March 1, 2017.
+Jump up ^ Foust, Jeff. "Shotwell: I was the 7th employee at SpaceX. We're up to about 7,000 now. #NewSpaceEurope".
+Jump up ^ "Gwynne Shotwell: Executive Profile & Biography". Bloomberg. Retrieved March 1, 2017.
+Jump up ^ W.J. Hennigan (2013-06-07). "How I Made It: SpaceX exec Gwynne Shotwell". Los Angeles Times. Retrieved March 1, 2017.
+Jump up ^ SpaceX Tour – Texas Test Site. spacexchannel. November 11, 2010. Retrieved May 23, 2012.
+Jump up ^ "SpaceX NASA CRS-6 PressKit Site" (PDF). April 12, 2015. Retrieved April 13, 2015.
+Jump up ^ Kenneth Chang (September 27, 2016). "Elon Musk's Plan: Get Humans to Mars, and Beyond". New York Times. Retrieved September 27, 2016.
+Jump up ^ Stephen Clark (September 28, 2008). "Sweet Success at Last for Falcon 1 Rocket". Spaceflight Now. Retrieved March 1, 2017.
+Jump up ^ Kenneth Chang (May 25, 2012). "Space X Capsule Docks at Space Station". New York Times. Retrieved May 25, 2012.
+Jump up ^ William Graham (April 13, 2015). "SpaceX Falcon 9 launches CRS-6 Dragon en route to ISS". NASASpaceFlight. Retrieved May 15, 2015.
+Jump up ^ Kirstin Brost (April 19, 2011). "SpaceX Wins NASA Contract to Complete Development of Successor to the Space Shuttle". SpaceX. Retrieved December 8, 2015.
+Jump up ^ Matthew Weaver (December 22, 2015). "'Welcome back, baby': Elon Musk celebrates SpaceX rocket launch – and landing". the Guardian. Retrieved March 1, 2017.
+Jump up ^ "SpaceX rocket successfully lands on ocean drone platform for first time". The Guardian. April 8, 2016. Retrieved March 1, 2017.
+Jump up ^ Loren Grush (May 6, 2016). "SpaceX successfully lands its Falcon 9 rocket on a floating drone ship again". The Verge. Retrieved March 1, 2017.
+Jump up ^ Amos, Jonathan. "Success for SpaceX 're-usable rocket'". BBC. BBC. Retrieved March 30, 2017.
+Jump up ^ "Liveblog: Elon Musk has revealed the Interplanetary Transport System". Ars Technica. September 27, 2016. Retrieved March 1, 2017.
+Jump up ^ Sean O'Kane (September 27, 2016). "SpaceX unveils the Interplanetary Transport System, a spaceship and rocket to colonize Mars". The Verge. Retrieved March 1, 2017.
+^ Jump up to: a b Alan Yuhas (February 28, 2017). "SpaceX to send two people around the moon who paid for a 2018 private mission". The Guardian. Retrieved March 1, 2017.
+Jump up ^ Emily Shanklin (February 27, 2017). "SpaceX to Send Privately Crewed Dragon Spacecraft Beyond the Moon Next Year". Retrieved March 1, 2017.
+Jump up ^ Greg Kumparak (27 February 2017). "SpaceX will send 2 people on a trip around the moon next year". TechCrunch. Retrieved March 1, 2017.
+Jump up ^ Miles O'Brien (June 1, 2012). "Elon Musk Unedited". Retrieved March 1, 2017.
+Jump up ^ John Carter McKnight (September 25, 2001). "Elon Musk, Life to Mars Foundation". Space Frontier Foundation. Retrieved March 1, 2017.
+Jump up ^ Elon Musk (May 30, 2009). "Risky Business". IEEE Spectrum. Retrieved March 1, 2017.
+Jump up ^ Elon Musk on dodging a nervous breakdown. YouTube. 20 April 2015. Retrieved March 1, 2017.
+^ Jump up to: a b c d Andrew Chaikin (January 2012). "Is SpaceX Changing the Rocket Equation?". Air & Space Smithsonian. Retrieved March 1, 2017.
+^ Jump up to: a b Ashlee Vance (May 14, 2015). "Elon Musk's space dream almost killed Tesla". Bloomberg. Retrieved March 1, 2017.
+Jump up ^ "How Steve Jurvetson Saved Elon Musk – Business Insider". Business Insider. 14 September 2012. Retrieved June 4, 2015.
+Jump up ^ "SpaceX". NASA Space Academy at Glenn. Retrieved June 4, 2015.
+Jump up ^ Elon's SpaceX Tour – Engines. YouTube. November 11, 2010. Retrieved March 1, 2017.
+Jump up ^ SpaceX and Daring to Think Big – Steve Jurvetson. YouTube. January 28, 2015. Retrieved June 4, 2015.
+Jump up ^ Elon Musk speaks at the Hyperloop Pod Award Ceremony. YouTube. January 31, 2016. Retrieved March 1, 2017.
+Jump up ^ Michael Belfiore (September 1, 2009). "Behind the Scenes With the World's Most Ambitious Rocket Makers". Popular Mechanics. Retrieved March 1, 2017.
+Jump up ^ Foust, Jeff (2005-11-14). "Big plans for SpaceX". The Space Review.
+Jump up ^ "Diane Murphy joins SpaceX as Vice President of Marketing and Communications" (Press release). SpaceX. July 10, 2008. Archived from the original on July 13, 2010.
+Jump up ^ Messier, Doug (16 October 2013). "ISPCS Morning Session: Gwynne Shotwell of SpaceX". Retrieved 7 December 2013. Gwynne Shotwell says that SpaceX is now up to about 3,800 employees, counting contractors working for the company. ... 600 more people to hire in next couple months. Finding good software people the hardest skills to fill.
+Jump up ^ "SpaceX's Redmond effort 'very speculative'". Seattle Times. November 7, 2015. Retrieved March 1, 2017.
+Jump up ^ Gwynne Shotwell (February 3, 2016). Gwynne Shotwell comments at Commercial Space Transportation Conference. Commercial Spaceflight. Event occurs at 2:43:15–3:10:05. Retrieved February 4, 2016.
+Jump up ^ de Selding, Peter B. (2017-04-14). "Blue Origin's older than SpaceX in more ways than one". Space Intel Report. Retrieved 2017-04-15.
+Jump up ^ Crosbie, Jackie (September 28, 2016). "Elon Musk Explains Why SpaceX Only Hires Americans".
+^ Jump up to: a b "Company | SpaceX". SpaceX. Retrieved March 1, 2017.
+^ Jump up to: a b James Dean (December 4, 2013). "SpaceX makes its point with Falcon 9 launch". USA Today. Retrieved March 1, 2017.
+^ Jump up to: a b c d Stephen Clark (December 3, 2013). "Falcon 9 rocket launches first commercial telecom payload". Spaceflight Now. Retrieved March 1, 2017.
+Jump up ^ Stephen Clark (November 24, 2013). "Sizing up America's place in the global launch industry". Spaceflight Now. Archived from the original on December 3, 2013. Retrieved November 25, 2013.
+Jump up ^ "REVEALED: The space suit humans on SpaceX rockets will wear to get to MARS".
+Jump up ^ "Space Exploration Technologies Corporation – press". SpaceX. Retrieved December 15, 2012.
+Jump up ^ "Elon Musk — Senate Testimon". SpaceX. May 5, 2004. Archived from the original on August 30, 2008. Retrieved March 1, 2017.
+^ Jump up to: a b Doug Mohney (September 26, 2011). "SpaceX Plans to Test Reusable Suborbital VTVL Rocket in Texas". Satellite Spotlight. Retrieved March 1, 2017.
+^ Jump up to: a b "Reusable rocket prototype almost ready for first liftoff". Spaceflight Now. July 9, 2012. Retrieved March 1, 2017.
+Jump up ^ Irene Klotz (2011-09-27). "A rocket that lifts off — and lands — on launch pad". MSNBC. Retrieved March 1, 2017.
+Jump up ^ Clark Lindsey (March 28, 2013). "SpaceX moving quickly towards fly-back first stage". NewSpace Watch. Retrieved March 29, 2013. (Subscription required (help)).
+^ Jump up to: a b Doug Messier (January 14, 2014). "Shotwell: Reusable Falcon 9 Would Cost $5 to $7 Million Per Launch". Parabolic Arc. Retrieved March 1, 2017.
+Jump up ^ "Elon Musk: I'll Put a Man on Mars in 10 Years". The Wall Street Journal. April 22, 2011. Retrieved March 1, 2017.
+Jump up ^ "Elon Musk on Mars: "It's a fixer-upper of a planet"". CBS News. September 21, 2012. Retrieved March 1, 2017.
+^ Jump up to: a b Steve Schaefer (June 6, 2013). "SpaceX IPO Cleared For Launch? Elon Musk Says Hold Your Horses". Forbes. Retrieved March 1, 2017.
+Jump up ^ Gwynne Shotwell (2014-03-21). Broadcast 2212: Special Edition, interview with Gwynne Shotwell (mp3) (audio file). The Space Show. Event occurs at 41:20–42:. 2212. Retrieved March 1, 2017.
+Jump up ^ Mir Juned Hussain. "The Rise and Rise of SpaceX". Yaabot. Retrieved March 1, 2017.
+^ Jump up to: a b "Elon Musk's SpaceX makes history by launching a 'flight-proven' rocket". Washington Post. Retrieved March 31, 2017.
+Jump up ^ "SpaceX, In Another First, Recovers $6 Million Nose Cone From Reused Falcon 9". Fortune.com. Retrieved May 2, 2017.
+Jump up ^ spacexcmsadmin (January 29, 2016). "ZUMA MISSION".
+Jump up ^ "Twitter: SpaceX successfully deployed 11 satellites into Low Earth orbit and landed back on ground for the first time in history". December 22, 2015. Retrieved December 22, 2015.
+Jump up ^ "Is the supercooled LOX used in Falcon 9 Full Thrust a first?". Retrieved May 2, 2017.
+Jump up ^ Stephen Clark (July 20, 2015). "Support strut probable cause of Falcon 9 failure". Spaceflight Now. Retrieved March 1, 2017.
+Jump up ^ "CRS-7 Investigation Update". SpaceX. July 20, 2015. Retrieved March 1, 2017.
+Jump up ^ Samantha Masunaga and Melody Petersen (September 2, 2016). "SpaceX rocket exploded in an instant. Figuring out why involves a mountain of data". LA Times. Retrieved March 1, 2017.
+Jump up ^ Reem Nasr (July 20, 2015). "Musk: This Is What Caused the SpaceX Launch Failure". CNBC. Retrieved March 1, 2017.
+Jump up ^ "SpaceX on Twitter: Update on this morning's anomaly". Twitter. September 1, 2016. Retrieved March 1, 2017.
+Jump up ^ Calandrelli E, Escher A (December 16, 2016). "The top 15 events that happened in space in 2016". TechCrunch. Retrieved March 1, 2017.
+Jump up ^ Marco Santana (September 6, 2016). "SpaceX customer vows to rebuild satellite in explosion aftermath". Orlando Sentinel. Retrieved March 1, 2017.
+Jump up ^ Samantha Masunaga (September 9, 2016). "Elon Musk: Launch pad explosion is 'most difficult and complex' failure in SpaceX's 14 years". LA Times. Retrieved March 1, 2017.
+Jump up ^ Loren Grush (November 5, 2016). "Elon Musk says SpaceX finally knows what caused the latest rocket failure". The Verge. Retrieved March 1, 2017.
+Jump up ^ "Anomaly Updates". SpaceX. September 1, 2016. Retrieved March 1, 2017.
+Jump up ^ Emily Shanklin (August 4, 2008). "SpaceX receives $20 million investment from Founder's Fund" (Press release). SpaceX. Archived from the original on August 6, 2008. Retrieved March 1, 2017.
+Jump up ^ Caleb Melby (March 12, 2012). "How Elon Musk Became A Billionaire Twice Over". Forbes. Retrieved March 1, 2017.
+^ Jump up to: a b "Elon Musk Anticipates Third IPO in Three Years With SpaceX". Bloomberg. February 11, 2012. Retrieved March 1, 2017. (Subscription required (help)).
+^ Jump up to: a b c Jane Watts (April 27, 2012). "Elon Musk on Why SpaceX Has the Right Stuff to Win the Space Race". CNBC. Retrieved March 1, 2017.
+Jump up ^ "Privately-held SpaceX Worth Nearly $2.4 Billion or $20/Share, Double Its Pre-Mission Secondary Market Value Following Historic Success at the International Space Station". Privco. June 7, 2012. Retrieved March 1, 2017.
+Jump up ^ Ricardo Bilton (June 10, 2012). "SpaceX's worth skyrockets to $4.8B after successful mission". VentureBeat. Retrieved March 1, 2017.
+Jump up ^ Reuters (January 20, 2015). "SpaceX raises $1 billion in funding from Google, Fidelity". NewsDaily. Archived from the original on January 21, 2015. Retrieved March 1, 2017.
+Jump up ^ Brian Berger (January 20, 2015). "SpaceX Confirms Google Investment". SpaceNews. Retrieved March 1, 2017.
+Jump up ^ "SpaceX overview on secondmarket". SecondMarket. Archived from the original on 2012-12-17.
+Jump up ^ "SpaceX goes there—seeks government funds for deep space".
+Jump up ^ Chris Woodyard (June 9, 2015). "Elon Musk: SpaceX goes public when Mars flights begin". USA Today. Retrieved March 1, 2017.
+Jump up ^ Ross Andersen (September 30, 2014). "Exodus: Elon Musk argues that we must put a million people on Mars if we are to ensure that humanity has a future". Aeon. Retrieved March 1, 2017.
+Jump up ^ "SpaceX Is Now One of the World's Most Valuable Privately Held Companies". NY Times. July 27, 2017. Retrieved November 16, 2017.
+Jump up ^ "SpaceX's Falcon 9 breaks EELV monopoly". Spaceflight Insider. May 27, 2015. Retrieved July 15, 2015.
+^ Jump up to: a b c "Falcon 9 Overview". SpaceX. 2011. Archived from the original on February 10, 2007. Retrieved March 1, 2017.
+^ Jump up to: a b "Private space capsule's maiden voyage ends with a splash". BBC News. December 8, 2010. Retrieved March 1, 2017.
+Jump up ^ Miriam Kramer (May 30, 2014). "SpaceX Unveils Dragon V2 Spaceship, a Manned Space Taxi for Astronauts — Meet Dragon V2: SpaceX's Manned Space Taxi for Astronaut Trips". Space.com. Retrieved March 1, 2017.
+Jump up ^ "SpaceX Draco Thruster Performs Long-Duration Firing and Restart" (Press release). SpaceX. December 9, 2008. Retrieved March 1, 2017.
+Jump up ^ "Falcon 9 Launch Vehicle Payload User's Guide, 2009" (PDF). SpaceX. 2009. Archived from the original on May 3, 2012. Retrieved March 1, 2017.
+Jump up ^ "SpaceX performs first test of Raptor engine - SpaceNews.com". SpaceNews.com. 2016-09-26. Retrieved 2017-04-28.
+Jump up ^ "SpaceX Successfully Launches Falcon 1 To Orbit" (Press release). SpaceX. September 28, 2008. Archived from the original on January 26, 2013. Retrieved March 1, 2017.
+Jump up ^ "SpaceX announces the Falcon 9 fully reusable heavy lift launch vehicle" (Press release). SpaceX. September 8, 2005. Archived from the original on March 26, 2013. Retrieved March 1, 2017.
+^ Jump up to: a b c Canadian Press (May 22, 2012). "Private SpaceX rocket blasts off for space station Cargo ship reaches orbit 9 minutes after launch". CBC News. Retrieved March 1, 2017.
+Jump up ^ "Falcon Heavy Overview". Space. 2011. Archived from the original on December 1, 2011. Retrieved March 1, 2017.
+Jump up ^ Clark Lindsey (2013-01-04). "NewSpace flights in 2013". NewSpace Watch. Retrieved 2013-01-03. (Subscription required (help)).
+Jump up ^ spacexcmsadmin (2012-11-15). "Falcon Heavy". SpaceX. Retrieved 2017-04-05.
+Jump up ^ Rituparna Chatterjee (April 7, 2011). "Falcon Heavy: World's most powerful rocket". Times of India. Retrieved March 1, 2017.
+Jump up ^ "SpaceX will attempt to launch a red Tesla to the red planet [Updated]".
+Jump up ^ Michael Belfiore (January 18, 2005). "Race for Next Space Prize Ignites". Wired. Archived from the original on October 12, 2008. Retrieved March 1, 2017.
+^ Jump up to: a b Keith Cowing (March 6, 2006). "The SpaceX Dragon: America's First Privately Financed Manned Orbital Spacecraft?". SpaceRef. Retrieved March 1, 2017.
+Jump up ^ "NASA selects crew, cargo launch partners". Spaceflight Now. August 18, 2006. Retrieved March 1, 2017.
+Jump up ^ "COTS Demo Flight 1 Press Kit" (PDF). SpaceX. Retrieved March 1, 2017.
+Jump up ^ "SpaceX". NASA. Retrieved March 1, 2017.
+Jump up ^ This Week in Space interview with Elon Musk. Spaceflight Now. January 24, 2010. Retrieved March 1, 2017.
+Jump up ^ Elon Musk's SpaceX presentation to the Augustine panel. YouTube. June 27, 2009. Retrieved March 1, 2017.
+^ Jump up to: a b Denise Chow (April 18, 2011). "Private Spaceship Builders Split Nearly $270 Million in NASA Funds". Space.com. Archived from the original on December 18, 2011. Retrieved March 1, 2017.
+^ Jump up to: a b "Private Space Taxi's Crew Escape System Passes Big Hurdle". Space.com. October 28, 2011. Retrieved March 1, 2017.
+Jump up ^ Jonathan Amos (February 28, 2017). "SpaceX Moon mission extends Elon Musk's ambitions". BBC News. Retrieved February 28, 2017.
+^ Jump up to: a b Mike Wall (September 10, 2015). "'Red Dragon' Mars Sample-Return Mission Could Launch by 2022". Space.com. Retrieved March 1, 2017.
+Jump up ^ "Planning to send Dragon to Mars as soon as 2018. Red Dragons will inform overall Mars architecture, details to come". Twitter. April 27, 2016. Retrieved March 1, 2017.
+Jump up ^ http://www.teslarati.com/spacex-skipping-red-dragon-vastly-bigger-ships-mars-confirms-musk/ http://www.teslarati.com/spacex-skipping-red-dragon-vastly-bigger-ships-mars-confirms-musk/
+Jump up ^ Liptak, Andrew (2017-09-02). "SpaceX has completed testing on the first stage cores for its Falcon Heavy rocket". The Verge. Retrieved 2017-09-03.
+Jump up ^ Timothy Prickett Morgan (March 27, 2015). "Rockets Shake and Rattle, so SpaceX Rolls Homegrown CFD". The Next Platform. Retrieved April 6, 2015.
+Jump up ^ Adam Lichtl and Stephen Jones (March 29, 2015). SpaceX Merlin (&Raptor) Engine R&D, GPU-Powered. SpaceX. Retrieved March 19, 2017.
+Jump up ^ Rand Simberg (February 8, 2012). "Elon Musk on SpaceX's Reusable Rocket Plans". Popular Mechanics. Retrieved March 1, 2017.
+Jump up ^ Alan Boyle (May 21, 2014). "Elon Musk's SpaceX Plans DragonFly Landing Tests". NBC News. Retrieved March 1, 2017.
+Jump up ^ Jacob Aron (January 17, 2015). "SpaceX rocket crashes in first attempted boat landing". New Scientist. Retrieved March 1, 2017.
+Jump up ^ Elon Musk (December 21, 2015). "Background on tonight's launch". SpaceX. Retrieved March 1, 2017.
+Jump up ^ SpaceX (April 8, 2016). CRS-8 | First Stage Landing on Droneship. YouTube. Retrieved March 1, 2017.
+Jump up ^ SpaceX (April 8, 2016). CRS-8 Dragon Hosted Webcast – landing clip. YouTube. Event occurs at 26:58. Retrieved March 1, 2017.
+Jump up ^ Peter B. de Selding (October 5, 2016). "SpaceX's Shotwell on Falcon 9 inquiry, discounts for reused rockets and Silicon Valley's test-and-fail ethos". SpaceNews. Retrieved March 1, 2017.
+Jump up ^ "SpaceX launches first recycled rocket in test of cost-cutting model". The Globe and Mail. Retrieved March 31, 2017.
+Jump up ^ "SpaceX successfully launches, lands a recycled rocket". NBC News. Retrieved March 31, 2017.
+Jump up ^ SpaceX (March 30, 2017), SES-10 Hosted Webcast, retrieved March 31, 2017
+Jump up ^ "Elon Musk plans to send 1 million people to Mars". Yahoo Tech. September 28, 2016. Retrieved March 1, 2017.
+Jump up ^ Gwynne Shotwell (March 21, 2014). Broadcast 2212: Special Edition, interview with Gwynne Shotwell (audio file). The Space Show. Event occurs at 20:00–21:10 and 22:15–22:35. 2212. Archived from the original (mp3) on March 22, 2014. Retrieved March 1, 2017.
+Jump up ^ "Long term SpaceX vehicle plans". HobbySpace.com. July 7, 2009. Archived from the original on February 17, 2012. Retrieved March 1, 2017.
+Jump up ^ David Todd (November 20, 2012). "Musk goes for methane-burning reusable rockets as step to colonise Mars". FlightGlobal Hyperbola. Archived from the original on November 28, 2012. Retrieved March 1, 2017.
+^ Jump up to: a b David Todd (November 1, 2012). "SpaceX's Mars rocket to be methane-fuelled". Flightglobal. Retrieved March 1, 2017.
+Jump up ^ Stephen Nellis (February 19, 2014). "SpaceX propulsion chief elevates crowd in Santa Barbara". Pacific Business Times. Retrieved March 1, 2017.
+Jump up ^ Dan Leone (October 25, 2013). "SpaceX Could Begin Testing Methane-fueled Engine at Stennis Next Year". Space News. Retrieved March 1, 2017.
+Jump up ^ "Elon Musk reveals first photos of SpaceX's powerful new Raptor engine". Ars Technica. 26 September 2016. Retrieved 26 September 2016.
+Jump up ^ Daniel Terdiman (March 9, 2013). "Elon Musk at SXSW: 'I'd like to die on Mars, just not on impact'". CNET. Retrieved March 1, 2017.
+Jump up ^ Alex Hern (June 2, 2016). "Elon Musk: 'Chances are we're all living in a simulation'". The Guardian. Retrieved March 1, 2017.
+Jump up ^ Sarah Fecht (June 2, 2016). "Elon Musk Wants To Put Humans On Mars By 2025". Popular Science. Retrieved March 1, 2017.
+Jump up ^ Cecilia Kang, Christian Davenport (June 9, 2015). "SpaceX founder files with government to provide Internet service from space". The Washington Post. Retrieved March 1, 2017.
+Jump up ^ Jeff Stone (June 10, 2015). "Elon Musk's SpaceX Plans To Launch 4,000 Satellites, Broadcasting Internet To Entire World". International Business Times. Retrieved March 1, 2017.
+Jump up ^ Peter B. de Selding (January 19, 2015). "SpaceX To Build 4,000 Broadband Satellites in Seattle". SpaceNews. Retrieved March 1, 2017.
+Jump up ^ Caleb Henry (March 2, 2017). "FCC gets five new applications for non-geostationary satellite constellations". Space News. Retrieved March 1, 2017.
+Jump up ^ Alan Boyle (June 15, 2015). "Elon Musk's SpaceX Plans Hyperloop Pod Races at California HQ in 2016". NBC. Retrieved March 1, 2017.
+Jump up ^ "Spacex Hyperloop Pod Competition" (PDF). SpaceX. June 2015. Archived from the original on July 14, 2015. Retrieved March 1, 2017.
+Jump up ^ David Z. Morris (July 16, 2016). "SpaceX Delays Hyperloop Pod Competition to 2017". Fortune. Retrieved March 1, 2017.
+Jump up ^ Todd Bishop (October 6, 2014). "SpaceX launching Seattle-area office, recruiting squadrons of Microsoft engineers". GeekWire. Retrieved March 1, 2017.
+^ Jump up to: a b Michael Belfiore (January 20, 2012). "Inside SpaceX: We Visit the Company's California Headquarters – Slide 3". Popular Mechanics. Retrieved March 1, 2017.
+Jump up ^ Gwynne Shotwell (June 4, 2014). Discussion with Gwynne Shotwell, President and COO, SpaceX. Atlantic Council. Event occurs at 37:50–38:58. Retrieved March 1, 2017. We are vertically integrated. ... Metal—in sheet format, in wire format, and in block format—comes into our Hawthorne facility and rocket stages roll out. ... eliminating the exponential G&A and fee additions [that are experienced when you have] multiple layers of integration. ... For every dollar that comes in we spend [about] 63 cents of each dollar of revenue on subcontractors and suppliers, [but at] a lower-level of integration (wires, connectors, raw materials).
+Jump up ^ Jason Paur (October 10, 2012). "Inside SpaceX's Texas Rocket-Testing Facility". Wired. Retrieved March 1, 2017.
+Jump up ^ Irene Klotz (August 2, 2013). "SpaceX Appetite for U.S. Launch Sites Grows". Space News. Retrieved March 1, 2017.
+Jump up ^ Chris Bergin (April 5, 2011). "SpaceX: Falcon Heavy, Falcon 9 tag team set to share 20 launches a year". NASASpaceFlight. Retrieved March 1, 2017.
+^ Jump up to: a b Stephen Clark (December 13, 2013). "SpaceX to begin negotiations for shuttle launch pad". SpaceflightNow. Retrieved March 1, 2017.
+Jump up ^ Richard J Keegan Jr. (December 12, 2013). "Selection Statement for Lease of Launch Complex 39A" (PDF). NASA. Retrieved March 1, 2017.
+Jump up ^ James Dean (April 14, 2014). "SpaceX takes over KSC pad 39A". Florida Today. Retrieved March 1, 2017.
+Jump up ^ Gwynne Shotwell (March 21, 2014). Broadcast 2212: Special Edition, interview with Gwynne Shotwell (mp3) (audio file). The Space Show. Event occurs at 20:00–21:10. 2212. Retrieved March 1, 2017.
+Jump up ^ Stephen Clark (December 12, 2013). "GAO decision opens door for commercial lease of pad 39A". Spaceflight Now. Retrieved March 1, 2017.
+Jump up ^ "Gov. Perry Announces State Incentives Bringing SpaceX Commercial Launch Facility, 300 Jobs to the Brownsville Area". Office of the Governor Rick Perry. August 4, 2014. Archived from the original on August 29, 2014. Retrieved March 1, 2017.
+Jump up ^ Eric Berger (August 4, 2014). "Texas, SpaceX announce spaceport deal near Brownsville". MySanAntonio.com. Retrieved March 1, 2017.
+^ Jump up to: a b Laura B. Martinez (April 15, 2013). "FAA shares SpaceX EIS report". The Brownsville Herald. Retrieved March 1, 2017.
+Jump up ^ Leonard David (July 15, 2014). "SpaceX receives FAA approval for proposed spaceport in Texas". CBS News. Retrieved March 1, 2017.
+Jump up ^ Jeff Foust (September 22, 2014). "SpaceX Breaks Ground on Texas Spaceport". Space News. Retrieved March 1, 2017.
+Jump up ^ Jeff Foust (April 1, 2013). "The great state space race". The Space Review. Retrieved March 1, 2017.
+Jump up ^ Emma Perez-Treviño (June 24, 2014). "Mars theme returns in SpaceX land purchases". Valley Morning Star. Retrieved March 1, 2017.
+Jump up ^ Emma Perez-Treviño (October 23, 2014). "SpaceX land holdings grow". Valley Morning Star. Retrieved March 1, 2017.
+Jump up ^ Gene (July 8, 2016). "SpaceX expands to new 8,000 sqft office space in Orange County, CA". Teslarati. Retrieved March 1, 2017.
+Jump up ^ Stewart Money (January 30, 2013). "SpaceX Wins New Commercial Launch Order". Innerspace.net. Retrieved March 1, 2017.
+Jump up ^ "SpaceX Signs New Commercial Launch Contracts". SpaceX. September 14, 2015. Retrieved March 1, 2017.
+Jump up ^ "SpaceX wins NASA COTS contract to demonstrate cargo delivery to Space Station with option for crew transport" (Press release). SpaceX. August 18, 2006. Retrieved March 1, 2017.
+Jump up ^ "Remarks by Alan Lindenmoyer, Manager, NASA Commercial Crew & Cargo Program" (PDF). NASA. April 26, 2010. Retrieved March 1, 2017.
+Jump up ^ "Mission Status Center". SpaceFlightNow. Retrieved March 1, 2017.
+^ Jump up to: a b Daniel Bates (December 9, 2010). "Mission accomplished! SpaceX Dragon becomes the first privately funded spaceship launched into orbit and guided back to earth". The Daily Mail. Retrieved March 1, 2017.
+Jump up ^ Brendan McGarry (May 25, 2012). "SpaceX Becomes First Company to Dock Ship at Space Station". The San Francisco Chronicle. Archived from the original on May 26, 2012. Retrieved March 1, 2017.
+Jump up ^ Kenneth Chang (May 22, 2012). "Big Day for a Space Entrepreneur Promising More". The New York Times. Retrieved March 1, 2017.
+Jump up ^ "NASA selects SpaceX's Falcon 9 booster and Dragon spacecraft for cargo resupply services to the International Space Station" (Press release). SpaceX. December 23, 2008. Retrieved March 1, 2017.
+Jump up ^ "NASA Celebrates Dragon's Return". NASA. Retrieved March 1, 2017.
+Jump up ^ Chris Bergin (March 3, 2015). "NASA lines up four additional CRS missions for Dragon and Cygnus". NASASpaceFlight. Retrieved March 1, 2017.
+Jump up ^ Jason Rhian (September 27, 2014). "NASA continues Commercial "push" with CRS extension". Spaceflight Insider. Retrieved March 1, 2017.
+Jump up ^ Peter B. de Selding (February 24, 2016). "SpaceX wins 5 new space station cargo missions in NASA contract estimated at $700 million". SpaceNews. Retrieved March 1, 2017.
+Jump up ^ "SpaceX Proposal for Commercial Crew Development Round 2" (PDF). NASA. 2011. Archived from the original (PDF) on June 12, 2012. Retrieved March 19, 2012.
+Jump up ^ Frank, Jr. Morring (April 25, 2011). "Five Vehicles Vie For Future Of U.S. Human Spaceflight". Aviation Week. Retrieved March 1, 2017.
+Jump up ^ "NASA Announces Next Steps in Effort to Launch Americans from U.S. Soil". NASA. August 3, 2012. Archived from the original on March 19, 2017. Retrieved March 1, 2017.
+Jump up ^ Zach Rosenberg (March 2, 2012). "SpaceX finishes crucial dress rehearsal before space station launch". FlightGlobal. Retrieved March 1, 2017.
+Jump up ^ "NASA Chooses American Companies to Transport U.S. Astronauts to International Space Station". NASA. September 16, 2014. Retrieved March 1, 2017.
+^ Jump up to: a b c d Atienza, Elias (2017-08-30). "NASA Shielding Elon Musk's SpaceX from Bad Press | LifeZette". LifeZette. Retrieved 2017-09-07.
+Jump up ^ King, Ledyard (2015-08-26). "NASA: SpaceX not receiving special treatment in crash probe". USA TODAY. Retrieved 2017-09-07.
+Jump up ^ "SpaceX Awarded $100 Million Contract From U.S. Air Force for Falcon I" (Press release). SpaceX. May 2, 2005. Archived from the original on August 30, 2008. Retrieved March 1, 2017.
+^ Jump up to: a b "NASA Awards Launch Services Contract to SpaceX" (Press release). NASA. April 22, 2008. Retrieved March 1, 2017.
+Jump up ^ Clark Lindsay (2012-12-05). "SpaceX awarded 2 EELV-Class missions from the USAF". NewSpace Watch. Retrieved 2012-12-05. (Subscription required (help)).
+Jump up ^ "Air Force's Space and Missile Systems Center Certifies SpaceX for National Security Space Missions". USAF. May 26, 2015. Retrieved March 1, 2017.
+Jump up ^ "SpaceX undercut ULA rocket launch pricing by 40 percent: U.S. Air Force". Reuters. April 28, 2016. Retrieved March 1, 2017.
+Jump up ^ Calendrelli E, Escher A (December 16, 2016). "The top 15 events that happened in space in 2016". TechCrunch. Retrieved March 1, 2017.
+Jump up ^ Mike Gruss (April 27, 2016). "SpaceX wins $82 million contract for 2018 Falcon 9 launch of GPS 3 satellite". Space News. Retrieved March 1, 2017.
+^ Jump up to: a b "Air Force Certifies SpaceX for Missions, Ends Launch Monopoly". Fox News. May 27, 2015. Retrieved March 1, 2017.
+Jump up ^ Christian Davenport (May 26, 2015). "Air Force certifies Elon Musk's SpaceX to launch national security missions". Washington Post. Retrieved March 1, 2017.
+^ Jump up to: a b Irene Klotz (March 15, 2011). "SpaceX Wins An SES Satellite Launch". Aviation Week. Retrieved March 1, 2017.
+Jump up ^ Gayle Putrich (June 24, 2010). "SpaceX seals biggest-ever commercial launch deal". FlightGlobal. Retrieved March 1, 2017.
+Jump up ^ Jonathan Amos (December 3, 2013). "SpaceX launches SES commercial TV satellite for Asia". BBC News. Retrieved March 1, 2017.
+Jump up ^ Michael Belfiore (December 9, 2013). "The Rocketeer". Foreign Policy. Retrieved March 1, 2017.
+^ Jump up to: a b Peter B. de Selding (January 12, 2015). "Arianespace, SpaceX Battled to a Draw for 2014 Launch Contracts". SpaceNews. Retrieved March 1, 2017.
+Jump up ^ Peter B. de Selding (April 14, 2014). "Europe's Satellite Operators Urge Swift Development of Ariane 6". SpaceNews. Retrieved March 1, 2017.
+Jump up ^ Amy Svitak (February 11, 2014). "Arianespace To ESA: We Need Help". Aviation Week. Retrieved March 1, 2017.
+Jump up ^ Peter B. de Selding (April 14, 2014). "Satellite Operators Press ESA for Reduction in Ariane Launch Costs". SpaceNews. Retrieved March 1, 2017.
+Jump up ^ David Ramli (May 19, 2015). "NBN launcher Arianespace to cut jobs and costs to fight SpaceX". The Sydney Morning Herald BusinessDay. Retrieved March 1, 2017.
+Jump up ^ François Némo (June 3, 2015). "Airbus dans la Silicon Valley : une occasion manquée pour l'Europe" (in French). lesechos.fr. Retrieved March 1, 2017.
+Jump up ^ Melody Petersen (November 25, 2014). "SpaceX may upset firm's monopoly in launching Air Force satellites". Los Angeles Times. Retrieved March 1, 2017.
+Jump up ^ Andrea Shalal (May 21, 2015). "Lockheed-Boeing rocket venture needs commercial orders to survive". Yahoo. Retrieved March 1, 2017.
+Jump up ^ Greg Avery (December 14, 2014). "ULA plans new rocket, restructuring to cut launch costs in half". Denver Business Journal. Retrieved March 1, 2017.
+Jump up ^ Melody Petersen (October 16, 2014). "Congress OKs bill banning purchases of Russian-made rocket engines". LA Times. Retrieved March 1, 2017.
+Further reading[edit]
+Vance, Ashlee (2015). Elon Musk : How the Billionaire CEO of SpaceX and Tesla is Shaping our Future. Virgin Books. ISBN 9780753555620.
+
+External links[edit]
+	Wikimedia Commons has media related to SpaceX.
+	Wikinews has news related to:
+SpaceX
+Official website
+SpaceX on Twitter & Elon Musk on Twitter
+SpaceX Instagram & Musk's Instagram
+SpaceX YouTube
+[show] v t e
+SpaceX
+[show] v t e
+Elon Musk
+Authority control	
+WorldCat Identities VIAF: 306391200 LCCN: no98127470 ISNI: 0000 0004 4672 1890
+Categories: SpaceXElon MuskSpace tourismHawthorne, CaliforniaAerospace companies of the United StatesCommercial launch service providersPrivate spaceflight companiesRocket engine manufacturersSpacecraft manufacturersHyperloopScience and technology in the Greater Los Angeles AreaManufacturing companies based in the Greater Los Angeles AreaTechnology companies based in the Greater Los Angeles AreaCompanies based in Los Angeles County, CaliforniaManufacturing companies established in 2002Technology companies established in 20022002 establishments in California
+Navigation menu
+Not logged inTalkContributionsCreate accountLog inArticleTalkReadEditView historySearch
+
+Search Wikipedia
+Go
+Main page
+Contents
+Featured content
+Current events
+Random article
+Donate to Wikipedia
+Wikipedia store
+Interaction
+Help
+About Wikipedia
+Community portal
+Recent changes
+Contact page
+Tools
+What links here
+Related changes
+Upload file
+Special pages
+Permanent link
+Page information
+Wikidata item
+Cite this page
+Print/export
+Create a book
+Download as PDF
+Printable version
+In other projects
+Wikimedia Commons
+Wikinews
+Languages
+Afrikaans
+العربية
+Azərbaycanca
+تۆرکجه
+বাংলা
+Bân-lâm-gú
+Беларуская
+भोजपुरी
+Български
+Català
+Čeština
+Cymraeg
+Dansk
+Deutsch
+Eesti
+Español
+Euskara
+فارسی
+Français
+한국어
+Հայերեն
+Bahasa Indonesia
+Íslenska
+Italiano
+עברית
+ქართული
+Қазақша
+Kurdî
+Lëtzebuergesch
+Limburgs
+Magyar
+മലയാളം
+Bahasa Melayu
+Монгол
+Nederlands
+日本語
+Norsk
+Norsk nynorsk
+Occitan
+Polski
+Português
+Română
+Русский
+Scots
+Shqip
+Simple English
+Slovenčina
+Slovenščina
+Српски / srpski
+Srpskohrvatski / српскохрватски
+Suomi
+Svenska
+தமிழ்
+ไทย
+Türkçe
+Українська
+Tiếng Việt
+Yorùbá
+Žemaitėška
+中文
+Edit links
+This page was last edited on 30 December 2017, at 15:04.
+Text is available under the Creative Commons Attribution-ShareAlike License; additional terms may apply. By using this site, you agree to the Terms of Use and Privacy Policy. Wikipedia® is a registered trademark of the Wikimedia Foundation, Inc., a non-profit organization.
+Privacy policyAbout WikipediaDisclaimersContact WikipediaDevelopersCookie statementMobile viewEnable previews
+Wikimedia Foundation Powered by MediaWiki

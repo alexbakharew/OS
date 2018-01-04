@@ -29,7 +29,7 @@ void load_page(size_t n)
 	page = NULL;
 	page_count = n;
 	if(page_count < 0) page_count = 0;
-	page = (char*) mmap(0, PAGE_SIZE, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, PAGE_SIZE * page_count);
+	page = (char*) mmap(0, PAGE_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, PAGE_SIZE * page_count);
 	if(page == MAP_FAILED) printf("Erorr while mapping memory\n");
 	//printf("JOPA\n");	
 	//page[PAGE_SIZE] = '\0';
@@ -100,22 +100,26 @@ int find_line(size_t n) // n - num of line
 	load_page(0);
 	while(curr_n != n)
 	{
-		if(page == NULL)// we read all file
+		if(page == NULL || page == MAP_FAILED || page[i] == '\0')// we read all file or page is not loaded
 		{
 			return LINE_ERROR;
-		}
-		if(page[i] == '\0')// end of page
-		{
-			++page_count;
-			load_page(page_count);
-			i = 0;
 		}
 		if(page[i] == '\n')
 		{
 			++curr_n;
 		}
 		++i;
-	}
+		if(i == PAGE_SIZE)// end of page
+		{
+			if(page[i - 1] == '\n')
+			{
+				++curr_n;
+			}
+			++page_count;
+			load_page(page_count);
+			i = 0;
+		}
+	} 
 	return i;
 }
 void read_line(size_t n) // 1
@@ -139,22 +143,23 @@ void read_line(size_t n) // 1
 void find_pattern(char* pattern, size_t n) // 2
 {
 	int i = find_line(n);
+	//printf("JOPA\n");
 	if(i == LINE_ERROR) 
 	{
 		printf("No such line!\n");
 		return;
 	}
 	int j = 0;
-	while(page[i] != '\n') // until end of line
+	while(i != PAGE_SIZE) // until end of line
 	{
 		if(pattern[j] == '\n' || pattern[j] == '\0' || j == PATTERN_SIZE)
 		{
-			printf("Pattern was found in this line\n");
+			printf("YES! That is match!\n");
 			return;
 		}
 		if(page[i] == '\n' || page[i] == '\0')
 		{
-			printf("There is no pattern in this line\n");
+			printf("NO! C``an't find this pattern!\n");
 			return;
 		}
 		if(page[i] == pattern[j])
@@ -181,7 +186,7 @@ void overwrite(size_t n, char* str) // 3 n - num of line
 		return;
 	}
 	size_t j = 0;
-	while(str[j] != '\n' || str[j] != '\0')
+	while(i != PAGE_SIZE || str[j] != '\0' || page[i] != '\0')
 	{
 		page[i] = str[j];
 		++i;
@@ -208,7 +213,6 @@ void info()
 }
 int main(int argc, char* argv[])
 {
-
 	char command[8] = {"default"};
 	if(argc == 2 && strcmp(argv[1], "?") == 0) info();
 	else if(argc > 1) //non-interactive mode
@@ -222,7 +226,7 @@ int main(int argc, char* argv[])
 	printf("What you want to do? For help, hit '?'\n");
 	while(1)
 	{
-		if(strcmp(command, "default") == 0) scanf("%s", command);
+		if(strcmp(command, "default") == 0 && argc == 1) scanf("%s", command);
 		if(strcmp("quit", command) == 0) break;
 		{//scope without func
 
@@ -234,7 +238,7 @@ int main(int argc, char* argv[])
 			else if(strcmp(command, "rl") == 0) 
 			{
 				size_t n;
-				if(argc == 2) n = (size_t)argv[2];
+				if(argc == 4) n = (size_t)argv[3];
 				else scanf("%lu", &n);
 				read_line(n);
 			}
@@ -248,8 +252,10 @@ int main(int argc, char* argv[])
 				{
 					size_t n;
 					char pattern[PATTERN_SIZE];
-					scanf("%lu", &n);
 					scanf("%s", pattern);
+					scanf("%lu", &n);
+					//printf("pattern %s\n", pattern);
+					//printf("n %lu\n", n);
 					find_pattern(pattern, n);
 				}
 			}
@@ -257,6 +263,7 @@ int main(int argc, char* argv[])
 			{
 				if(argc == 3)
 				{
+					//printf("JOPA\n");
 					overwrite((size_t)argv[2], argv[3]);
 				}
 				else
@@ -273,6 +280,7 @@ int main(int argc, char* argv[])
 			if(argc > 2) return 0;
 			printf("\nWhat you want to do? For help, hit '?'\n");
 			scanf("%s", command);
+			
 		}//scope without func
 
 	}
