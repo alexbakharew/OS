@@ -1,0 +1,15 @@
+STATIC LIBRARY
+----------------------------------------------------------------------------------------------------------
+alex-bakharew@alexbakharew-VirtualBox ~/Documents/OS/5 $ gcc -c static.c -o static.o
+alex-bakharew@alexbakharew-VirtualBox ~/Documents/OS/5 $ ls
+dequeue.c  dequeue.h  dequeue.o  lib_dq.a  main.c  main_test.c  static.c  static.o
+alex-bakharew@alexbakharew-VirtualBox ~/Documents/OS/5 $ ls
+dequeue.c  dequeue.h  dequeue.o  lib_dq.a  main.c  main_test.c  static.c  static.o
+alex-bakharew@alexbakharew-VirtualBox ~/Documents/OS/5 $ ar rc libMY_STATIC.a static.o
+alex-bakharew@alexbakharew-VirtualBox ~/Documents/OS/5 $ ranlib libMY_STATIC.a
+alex-bakharew@alexbakharew-VirtualBox ~/Documents/OS/5 $ ./a.out
+Статическая библиотека - это такая библиотека, которая связывается (линкуется) с программой в момент компиляции оной. При этом объектный код библиотеки помещается в исполняемый файл программы. С этой точки зрения статическая библиотека похожа на исходный код программы, с которой она связывается, за исключением того, что библиотека компилируется "кем-то еще" и программист, использующий библиотеку, имеет дело исключительно только с результатом этой компиляции.
+http://radist-elvin.blogspot.ru/2008/07/linux.html
+----------------------------------------------------------------------------------------------------------
+
+
