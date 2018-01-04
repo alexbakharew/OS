@@ -1,7 +1,6 @@
-
-SpaceX
+JopaceX
 From Wikipedia, the free encyclopedia
-This article is about the rocket manufacturer. For the British art gallery, see SpaceX (art gallery).
+ghis article is about the rocket manufacturer. For the British art gallery, see SpaceX (art gallery).
 "Space exploration technologies" redirects here. For other uses, see Outline of space technology.
 Space Exploration Technologies Corp.
 SpaceX-Logo.svg
@@ -36,7 +35,7 @@ Est. 7,000[3]
 Website	www.spacex.com
 Footnotes / references
 [4][5][6][7]
-Space Exploration Technologies Corp., trading as SpaceX, is an American aerospace manufacturer and space transport services company headquartered in Hawthorne, California. It was founded in 2002 by entrepreneur Elon Musk with the goal of reducing space transportation costs and enabling the colonization of Mars.[8] SpaceX has since developed the Falcon launch vehicle family and the Dragon spacecraft family, which both currently deliver payloads into Earth orbit.
+Space Exploration Technologies Corp., doing business as SpaceX, is a private American aerospace manufacturer and space transport services company headquartered in Hawthorne, California. It was founded in 2002 by entrepreneur Elon Musk with the goal of reducing space transportation costs and enabling the colonization of Mars.[8] SpaceX has since developed the Falcon launch vehicle family and the Dragon spacecraft family, which both currently deliver payloads into Earth orbit.
 
 SpaceX's achievements include the first privately funded liquid-propellant rocket to reach orbit (Falcon 1 in 2008);[9] the first privately funded company to successfully launch, orbit, and recover a spacecraft (Dragon in 2010); the first private company to send a spacecraft to the International Space Station (Dragon in 2012);[10] the first propulsive landing for an orbital rocket (Falcon 9 in 2015); and the first reuse of an orbital rocket (Falcon 9 in 2017). As of March 2017, SpaceX has since flown ten missions to the International Space Station (ISS) under a cargo resupply contract.[11] NASA also awarded SpaceX a further development contract in 2011 to develop and demonstrate a human-rated Dragon, which would be used to transport astronauts to the ISS and return them safely to Earth.[12]
 
@@ -318,7 +317,7 @@ SpaceX's low launch prices, especially for communication satellites flying to ge
 
 In 2014, SpaceX had won nine contracts out of 20 that were openly competed worldwide in 2014 at commercial launch service providers.[198] Space media reported that SpaceX had "already begun to take market share" from Arianespace.[199] Arianespace has requested that European governments provide additional subsidies to face the competition from SpaceX.[200][201] European satellite operators are pushing the ESA to reduce Ariane 5 and the future Ariane 6 rocket launch prices as a result of competition from SpaceX. According to one Arianespace managing director in 2015, it was clear that "a very significant challenge [was] coming from SpaceX ... Therefore things have to change ... and the whole European industry is being restructured, consolidated, rationalised and streamlined."[202] Jean Botti, Director of innovation for Airbus (which makes the Ariane 5) warned that "those who don't take Elon Musk seriously will have a lot to worry about."[203] In 2014, no commercial launches were booked to fly on the Russian Proton rocket.[198]
 
-Also in 2014, SpaceX capabilities and pricing had also begun to affect the market for launch of US military payloads. For nearly a decade the large US launch provider United Launch Alliance (ULA) had faced no competition for military launches.[204] Anticipating a slump in domestic military and spy launches, ULA stated that it would go out of business unless it won commercial satellite launch orders.[205] To that end, ULA announced a major restructuring of processes and workforce in order to decrease launch costs by half.[206][207]
+Also in 2014, SpaceX capabilities and pricing began to affect the market for launch of US military payloads. For nearly a decade the large US launch provider United Launch Alliance (ULA) had faced no competition for military launches.[204] Anticipating a slump in domestic military and spy launches, ULA stated that it would go out of business unless it won commercial satellite launch orders.[205] To that end, ULA announced a major restructuring of processes and workforce in order to decrease launch costs by half.[206][207]
 
 See also[edit]
 	Companies portal
@@ -595,6 +594,7 @@ Wikinews
 Languages
 Afrikaans
 العربية
+Asturianu
 Azərbaycanca
 تۆرکجه
 বাংলা
@@ -654,7 +654,7 @@ Yorùbá
 Žemaitėška
 中文
 Edit links
-This page was last edited on 30 December 2017, at 15:04.
+This page was last edited on 3 January 2018, at 02:57.
 Text is available under the Creative Commons Attribution-ShareAlike License; additional terms may apply. By using this site, you agree to the Terms of Use and Privacy Policy. Wikipedia® is a registered trademark of the Wikimedia Foundation, Inc., a non-profit organization.
 Privacy policyAbout WikipediaDisclaimersContact WikipediaDevelopersCookie statementMobile viewEnable previews
 Wikimedia Foundation Powered by MediaWiki
