@@ -1,5 +1,6 @@
 #include <sys/types.h>
 #include <sys/mman.h>
+#include <sys/stat.h>
 #include <err.h>
 #include <fcntl.h>
 #include <stdio.h>
@@ -9,12 +10,16 @@
 #include <unistd.h>
 #define PAGE_SIZE 4096
 #define PATTERN_SIZE 128
+#define FILE_NAME_SIZE 128
 #define LINE_ERROR -101
 #define TEST_FILE "tmp.txt"
 
 int fd;
 int page_count = 0;
 char* page = NULL;
+struct stat file_info;
+char file_name[FILE_NAME_SIZE];
+
 void print_page()
 {
 	if(page == NULL) return;
@@ -68,18 +73,14 @@ void wc() // amount of lines and chars in whole file
 }
 void change_file()
 {
-	printf("Enter the name of needed file\n");
-	//printf("command\n");
-	char file_name[128];
-	scanf("%s", file_name);
 	int temp_fd = open(file_name, O_RDWR | O_APPEND);
-	
 	if(temp_fd > 0)
 	{
+    	stat(file_name, &file_info);
 		fd = temp_fd;
 		if(page != NULL) munmap(page, PAGE_SIZE);
 		page = NULL;
-		//printf("OK\n");
+		printf("OK\n");
 		return;
 	}
 	else perror("unable to load file!\n");
@@ -159,7 +160,7 @@ void find_pattern(char* pattern, size_t n) // 2
 		}
 		if(page[i] == '\n' || page[i] == '\0')
 		{
-			printf("NO! C``an't find this pattern!\n");
+			printf("NO! Can't find this pattern!\n");
 			return;
 		}
 		if(page[i] == pattern[j])
@@ -185,18 +186,22 @@ void overwrite(size_t n, char* str) // 3 n - num of line
 		printf("No such line!\n");
 		return;
 	}
-	size_t j = 0;
-	while(i != PAGE_SIZE || str[j] != '\0' || page[i] != '\0')
+	size_t j = 0; // iter for pattern
+	while(i != PAGE_SIZE && str[j] != '\0' && page[i] != '\0')
 	{
 		page[i] = str[j];
 		++i;
 		++j;
 	}
+	printf("OK\n");
 }
 
 bool is_opened() // 4
 {
-	return false;
+	struct stat temp_file_info;
+	if(stat(file_name, &temp_file_info) == 0)
+	printf("%lu %lu\n", file_info.st_atime, temp_file_info.st_atime);
+	return file_info.st_atime != temp_file_info.st_atime;
 }
 
 void info()
@@ -215,22 +220,34 @@ int main(int argc, char* argv[])
 {
 	char command[8] = {"default"};
 	if(argc == 2 && strcmp(argv[1], "?") == 0) info();
-	else if(argc > 1) //non-interactive mode
+	
+	if(argc > 1) //non-interactive mode
 	{
-		fd = open(argv[1], O_RDWR | O_APPEND);
+		strcpy(file_name, argv[1]);
+		change_file();
 		strcpy(command, argv[2]);
 		//command = argv[2];
 	}
-	else change_file();
+	else 
+	{
+		printf("Enter name of file\n");
+		scanf("%s", file_name);
+		change_file();
+	}
 	
-	printf("What you want to do? For help, hit '?'\n");
+	if(argc < 2)printf("What you want to do? For help, hit '?'\n");
 	while(1)
 	{
 		if(strcmp(command, "default") == 0 && argc == 1) scanf("%s", command);
 		if(strcmp("quit", command) == 0) break;
 		{//scope without func
 
-			if(strcmp(command, "cf") == 0) change_file();
+			if(strcmp(command, "cf") == 0)
+			{
+				printf("Enter name of file\n");
+				scanf("%s", file_name);
+				change_file();
+			}
 			else if(strcmp(command, "wc") == 0) 
 			{
 				wc();
@@ -238,15 +255,22 @@ int main(int argc, char* argv[])
 			else if(strcmp(command, "rl") == 0) 
 			{
 				size_t n;
-				if(argc == 4) n = (size_t)argv[3];
-				else scanf("%lu", &n);
+				if(argc == 4) 
+				{
+					n = (size_t)atoi(argv[3]);
+				}
+				else 
+				{
+					scanf("%lu", &n);
+				}
 				read_line(n);
+				fflush(stdin);
 			}
 			else if(strcmp(command, "fp") == 0)
 			{
-				if(argc == 3)
+				if(argc == 5)
 				{
-					find_pattern(argv[2], (size_t)argv[3]);
+					find_pattern(argv[3], (size_t) atoi(argv[4]));
 				}
 				else
 				{
@@ -254,17 +278,16 @@ int main(int argc, char* argv[])
 					char pattern[PATTERN_SIZE];
 					scanf("%s", pattern);
 					scanf("%lu", &n);
-					//printf("pattern %s\n", pattern);
-					//printf("n %lu\n", n);
 					find_pattern(pattern, n);
+					fflush(stdin);
 				}
 			}
 			else if(strcmp(command,"ow") == 0)
 			{
-				if(argc == 3)
+				if(argc == 5)
 				{
 					//printf("JOPA\n");
-					overwrite((size_t)argv[2], argv[3]);
+					overwrite((size_t) atoi(argv[3]), argv[4]);
 				}
 				else
 				{
@@ -273,10 +296,16 @@ int main(int argc, char* argv[])
 					scanf("%lu", &n);
 					scanf("%s", text);
 					overwrite(n, text);
+					fflush(stdin);
 				}
 			}
-			else if(strcmp(command,"io") == 0){}
+			else if(strcmp(command,"io") == 0)
+			{
+				if(is_opened()) printf("YES\n");
+				else printf("NO\n");
+			}
 			else if(strcmp(command, "?") == 0) info();
+			else printf("Wrong command. Try again\n");
 			if(argc > 2) return 0;
 			printf("\nWhat you want to do? For help, hit '?'\n");
 			scanf("%s", command);
