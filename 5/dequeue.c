@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "dequeue.h"
-
+//#include <dynamic.h>
 extern void push_back(dequeue* dq, long int val)
 {
     elem* tmp = (elem*) malloc(sizeof(elem));

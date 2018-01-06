@@ -4,8 +4,11 @@
 int main()
 {
     dequeue* dq = (dequeue*) malloc(sizeof(dequeue));
-    dq->size = 1450;
+    dq->size = 0;
     printf("%d\n", size_of(dq));
+    //push_front(dq, 500);
+    //push_front(dq, 600);
+    //push_front(dq, 700);
     free(dq);
     return 0;
 }
