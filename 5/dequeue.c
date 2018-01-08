@@ -31,20 +31,22 @@ extern size_t size_of(dequeue* dq)
 extern long int pop_front(dequeue* dq)
 {
     elem* tmp = dq->begin;
-    dq->begin = tmp->next;
+    dq->begin = dq->begin->next;
     dq->begin->prev = NULL;
     long int val = tmp->value;
     free(tmp);
     tmp = NULL;
+    dq->size--;
     return val;
 };
 extern long int pop_back(dequeue* dq)
 {
     elem* tmp = dq->end;
-    dq->end = tmp->prev;
+    dq->end = dq->end->prev;
     dq->end->next = NULL;
     long int val = tmp->value;
     free(tmp);
     tmp = NULL;
+    dq->size--;
     return val;
 };

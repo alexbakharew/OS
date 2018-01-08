@@ -14,7 +14,8 @@ http://radist-elvin.blogspot.ru/2008/07/linux.html
 DYNAMIC LIBRARY
 ----------------------------------------------------------------------------------------------------------
 Динамическая библиотека - библиотека, подключаемая к программе в момент выполнения. Это означает, что при создании библиотеки производится не только ее компиляция, но и линковка с другими, нужными ей, библиотеками (!).
-
+http://www.firststeps.ru/linux/r.php?7
+http://www.firststeps.ru/linux/r.php?7
 alex-bakharew@alexbakharew-VirtualBox ~/Documents/OS/5 $ gcc -fPIC -c dequeue.c -o dynamic_dq.o
 
 alex-bakharew@alexbakharew-VirtualBox ~/Documents/OS/5 $ gcc -shared -o libDYN_DQ.so dynamic_dq.o

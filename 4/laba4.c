@@ -200,8 +200,8 @@ bool is_opened() // 4
 {
 	struct stat temp_file_info;
 	if(stat(file_name, &temp_file_info) == 0)
-	printf("%lu %lu\n", file_info.st_atime, temp_file_info.st_atime);
-	return file_info.st_atime != temp_file_info.st_atime;
+	//printf("%lu %lu\n", file_info.st_ctime, temp_file_info.st_ctime);
+	return file_info.st_ctime != temp_file_info.st_ctime;
 }
 
 void info()
