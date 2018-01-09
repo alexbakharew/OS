@@ -24,15 +24,23 @@ extern void push_front(dequeue* dq, long int val)
     dq->size++;
     return;
 };
-extern size_t size_of(dequeue* dq)
+extern size_t size(dequeue* dq)
 {
     return dq->size;
 };
 extern long int pop_front(dequeue* dq)
 {
     elem* tmp = dq->begin;
-    dq->begin = dq->begin->next;
-    dq->begin->prev = NULL;
+    if(dq->size == 1)
+    {
+        dq->begin = NULL;
+        dq->end = NULL;
+    }
+    else
+    {
+        dq->begin = tmp->next;
+        dq->begin->prev = NULL;
+    }
     long int val = tmp->value;
     free(tmp);
     tmp = NULL;
@@ -42,8 +50,16 @@ extern long int pop_front(dequeue* dq)
 extern long int pop_back(dequeue* dq)
 {
     elem* tmp = dq->end;
-    dq->end = dq->end->prev;
-    dq->end->next = NULL;
+    if(dq->size == 1)
+    {
+        dq->begin = NULL;
+        dq->end = NULL;
+    }
+    else
+    {
+        dq->end = tmp->prev;
+        dq->end->next = NULL;
+    }
     long int val = tmp->value;
     free(tmp);
     tmp = NULL;
