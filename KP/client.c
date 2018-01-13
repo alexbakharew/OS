@@ -51,9 +51,9 @@ int main()
         scanf("%s", command);
         if(strcmp(command, "m") == 0) // write message
         {
-            printf("You should compose following text:\n");
-            printf("To <reciever>.\\n \n");
-            printf("<Your message>\\n \n");
+            char name_rec[14]; // recipient name
+            printf("<To> \n");
+            printf("<Your message>\n");
             scanf("%s", message);
             fflush(stdin);
             // (write(client_sock, message, MSG_SIZE) != -1) printf("Your message was successfully sent\n");
@@ -68,7 +68,8 @@ int main()
         if(strcmp(command, "r") == 0) 
         {
             //if(unlink(name) == -1) perror("unlink:");
-            //connect_to_server(name, &client_sock);            
+            //connect_to_server(name, &client_sock);     
+            strcpy(message, name);       
             strcpy(message, "r");
             if(send(client_sock, (void*)message, MSG_SIZE, 0) > -1) printf("Your request was successfully sent\n");
             continue;

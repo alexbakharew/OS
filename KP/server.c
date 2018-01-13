@@ -6,7 +6,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "config.h"
-//int message()
 typedef struct
 {
     char name[14];
@@ -35,7 +34,7 @@ int main()
     while(1)
     {
         temp_sock = accept(serv_sock, NULL, NULL); // We don't care about client's address/
-        if (temp_sock < 0) 
+        if (temp_sock < 0) // Waiting for connection
         {
             perror("accept");
             sleep(2);
@@ -43,9 +42,27 @@ int main()
         }
         size_t bytes_read = 0;
         bytes_read = recv(temp_sock, message, MSG_SIZE, 0);
-        if(bytes_read <= 0) continue;
-        else printf("Server: Your message is: %s\n", (char*)message);
-        //int send(int sockfd, const void *msg, int len, int flags);
+        if(bytes_read < 0) // client is connected. Waiting for message
+        {
+            close(temp_sock);
+            break;
+        }
+        else // Message is here.
+        {
+            printf("Server: Your message is: %s\n", (char*)message);
+            if(strcmp(message, "r"))
+            {
+                //
+            }
+            else
+            {
+                //determine recipient
+                //move to database
+
+            }
+
+            close(temp_sock);
+        }
     }
-        //close(temp_sock);
+        //int send(int sockfd, const void *msg, int len, int flags);
 }
