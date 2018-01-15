@@ -3,7 +3,7 @@
 #include<sys/msg.h>
 #include <stdio.h>
 #include "config.h"
-int connect(void)
+int connect()
 {
     printf("Choose bank, which you want to connect...\n");
     printf("1 - SBERBANK\n");
@@ -36,10 +36,46 @@ int connect(void)
 }
 int main()
 {
-    int msgid = connect(); // connect to bank
+    int msgid_server = connect(); // connect to bank
+    node* root = NULL;
     while(1)
     {
+        message* msg = (message*) malloc(sizeof(message));
+        msgrcv(msgid_server, msg, sizeof(message), 0, 0);
+        if(msg->type == 0)// auth message from client
+        {
+            if(add_user(&root, msg))
+            {
+                //successful message
+            }
+            else
+            {
+                //unsuccessful message
+            }
+            tmp_msgid = msgget(msg->sender_id, IPC_CREAT | 0666);
+            msgsnd(tmp_msgid, msg, sizeof(message), IPC_NOWAIT);
+            continue;
+        }
+        else if(msg->type == 1)
+        {
+            
+        }
+        else if(msg->type == 2)
+        {
+            
+        }
+        else if(msg->type == 3)
+        {
+            
+        }
+        else if(msg->type == 4)
+        {
+            
+        }
+        else
+        {
 
+        }
     }
 
 
