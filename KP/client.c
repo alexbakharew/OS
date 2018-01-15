@@ -79,13 +79,14 @@ int main()
             stored_message* message = (stored_message*) malloc(sizeof(stored_message));
             message->type = true; // request
             strcpy(message->sender, name);
-            strcpy(message->msg, "r");
+            //strcpy(message->msg, "r");
             if(send(client_sock, (void*)message, sizeof(stored_message), 0) > 0) printf("Your request was successfully sent\n");
             //while(1)
             //{
                 printf("waiting for answer...\n");
                 sleep(3);
             //}
+            free(message);
             continue;
         }
         else if(strcmp(command, "q") == 0) exit(0);
