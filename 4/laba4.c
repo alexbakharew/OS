@@ -200,10 +200,25 @@ bool is_opened() // 4
 {
 	struct stat temp_file_info;
 	if(stat(file_name, &temp_file_info) == 0)
+	{
+		return file_info.st_atime != temp_file_info.st_atime;
+	}
+	else
+	{
+		printf("Can't load file info\n");
+		return false;
+	}
 	//printf("%lu %lu\n", file_info.st_ctime, temp_file_info.st_ctime);
-	return file_info.st_ctime != temp_file_info.st_ctime;
 }
+/*
+The  field  st_atime  is  changed  by  file accesses, for example, by execve(2), mknod(2), pipe(2), utime(2) and read(2) (of more than zero bytes).  Other routines, like
+ mmap(2), may or may not update st_atime.
 
+The field st_mtime is changed by file modifications, for example, by mknod(2), truncate(2), utime(2) and write(2) (of more than zero bytes).   Moreover,  st_mtime  of  a
+directory is changed by the creation or deletion of files in that directory.  The st_mtime field is not changed for changes in owner, group, hard link count, or mode.
+
+The field st_ctime is changed by writing or by setting inode information (i.e., owner, group, link count, mode, etc.).
+*/
 void info()
 {
 	printf("you can proceed following commands:\n");

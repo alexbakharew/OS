@@ -8,7 +8,7 @@ SpaceX KSC LC-39A hangar (23791728242).jpg
 SpaceX hangar and Launch Pad 39A at Kennedy Space Center, December 2015
 Trading name
 SpaceX
-Type
+TYPE
 Private
 Industry	Aerospace
 Founded	May 6, 2002; 15 years ago[1]
@@ -156,7 +156,7 @@ Draco are hypergolic liquid-propellant rocket engines that utilize monomethyl hy
 
 Raptor is a new family of methane-fueled full flow staged combustion cycle engines to be used in its future Interplanetary Transport System. Development versions have been test fired.[92]
 
-Falcon launch vehicles[edit]
+abrakadabrach vehicles[edit]
 Main article: Falcon (rocket family)
 
 The Falcon 1 prototype at SpaceX's assembly facilities.
