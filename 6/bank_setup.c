@@ -13,3 +13,40 @@ int main()
     printf("All banks is opened\n");
     return 0;
 }
+/*
+if(msg->type == 0)// auth message from client
+        {
+            if(add_user(&root, msg))
+            {
+                //successful message
+            }
+            else
+            {
+                //unsuccessful message
+            }
+            tmp_msgid = msgget(msg->sender_id, IPC_CREAT | 0666);
+            msgsnd(tmp_msgid, msg, sizeof(message), IPC_NOWAIT);
+            continue;
+        }
+        else if(msg->type == 1)
+        {
+            
+        }
+        else if(msg->type == 2)
+        {
+            
+        }
+        else if(msg->type == 3)
+        {
+            
+        }
+        else if(msg->type == 4)
+        {
+            
+        }
+        else
+        {
+
+        }
+    }
+*/

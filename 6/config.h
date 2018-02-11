@@ -1,9 +1,15 @@
 #define SBERBANK 100
 #define VTB 101
 #define RAIFAZEN 102
+//--------------------------
+#define SBERBANK_CLOUD 1001
+#define VTB_CLOUD 1011
+#define RAIFAZEN_CLOUD 1021
+//--------------------------
 #define NOT_ENOUGH_MONEY -1
 #define UNREGISTERED_USER -2
 #define AUTH_ERROR -3
+#define CONNECT_ERROR -4
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>

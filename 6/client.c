@@ -40,7 +40,7 @@ int connect()
     else 
     {
         printf("Erorr while connection\n");
-        exit(0);
+        return CONNECT_ERROR;
     }
 }
 
@@ -89,7 +89,7 @@ void reply(int msgid_client)
         }
         else if(tmp_msg->type == 2)
         {
-            printf("Now you have: %llu$\n", tmp_msg->value);
+            printf("You have: %llu$\n", tmp_msg->value);
         }
         else if(tmp_msg->type == 3)
         {
@@ -109,6 +109,12 @@ int main()
 {
     message* msg = (message*) malloc(sizeof(message));
     int msgid_serv = connect(); // connection to preferable bank
+    if(msgid_serv == CONNECT_ERROR)
+    {
+        printf("Error while connection to the server\n");
+        exit(-1);
+    }
+    else printf("Successful connection\n");
     if(!authentification(msg, msgid_serv)) 
     {
         printf("Error while authentification on server\n");
@@ -117,14 +123,18 @@ int main()
     else printf("Successful authorization\n");
 
     int msgid_client = msgget((key_t)msg->sender_id, IPC_CREAT | 0666); //MQ for client
-
+    if(msgid_client == -1) 
+    {
+        perror("msgget\n");
+        exit(-1);
+    }
     char command;
     while(1)
     {
         printf("1 - transfer $ to someone\n");
         printf("2 - get your bank account\n");
         printf("3 - withdraw some $\n");
-        printf("4 - replish a bank account\n");
+        printf("4 - replenish a bank account\n");
         printf("q - for exit\n"); 
         scanf("%s", &command);
         if(command == '1')
@@ -181,7 +191,8 @@ int main()
         }  
         else if(command == 'q')
         {
-            printf("eait from client\n");
+            printf("exit from client\n");
+            msgctl(msgid_client,IPC_RMID,NULL);
             free(msg);
         }  
         else printf("Wrong command. Try again\n");

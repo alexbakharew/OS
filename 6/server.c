@@ -14,67 +14,45 @@ int connect()
     int msgid;
     if(a == 1)
     {
-        int msgflg = IPC_CREAT | 0666;
-        key_t key = (key_t)SBERBANK;
-        msgid = msgget(key, msgflg);
+        msgid = msgget((key_t)SBERBANK, IPC_CREAT | 0666);
+        msgid_cloud = msgget((key_t)SBERBANK_CLOUD, IPC_CREAT | 0666)
     }
     else if(a == 2)
     {
-        int msgflg = IPC_CREAT | 0666;
-        key_t key = (key_t)VTB;
-        msgid = msgget(key, msgflg);
+
+        msgid = msgget((key_t)VTB, IPC_CREAT | 0666);
+        msgid_cloud = msgget((key_t)VTB_CLOUD, IPC_CREAT | 0666)
     }
     else
     {
-        int msgflg = IPC_CREAT | 0666;
-        key_t key = (key_t)RAIFAZEN;
-        msgid = msgget(key, msgflg);
+        msgid = msgget((key_t)RAIFAZEN, IPC_CREAT | 0666);
+        msgid_cloud = msget((key_t)RAIFAZEN_CLOUD, IPC_CREAT | 0666);
     }
-    if(msgid != -1)printf("successfull connection\n");
-    else printf("Erorr while connection\n");
-    return msgid;
+    if(msgid != -1 && msgid_cloud != -1) 
+    {
+        printf("successfull connection\n");
+        return msgid;
+    }
+    else
+    {
+        printf("Erorr while connection\n");
+        return CONNECT_ERROR;
+    }
+    
 }
+int msgid_cloud = - 1; // MQ for bank cloud
 int main()
 {
     int msgid_server = connect(); // connect to bank
-    node* root = NULL;
+    if(msgid_server == CONNECT_ERROR) exit(-1);
     while(1)
     {
         message* msg = (message*) malloc(sizeof(message));
-        msgrcv(msgid_server, msg, sizeof(message), 0, 0);
-        if(msg->type == 0)// auth message from client
+        if(msgrcv(msgid_server, msg, sizeof(message), 0, 0) < 1) continue;
+        if(msgsnd(msgid_cloud, msg, sizeof(message), IPC_NOWAIT) == -1)
         {
-            if(add_user(&root, msg))
-            {
-                //successful message
-            }
-            else
-            {
-                //unsuccessful message
-            }
-            tmp_msgid = msgget(msg->sender_id, IPC_CREAT | 0666);
-            msgsnd(tmp_msgid, msg, sizeof(message), IPC_NOWAIT);
-            continue;
-        }
-        else if(msg->type == 1)
-        {
-            
-        }
-        else if(msg->type == 2)
-        {
-            
-        }
-        else if(msg->type == 3)
-        {
-            
-        }
-        else if(msg->type == 4)
-        {
-            
-        }
-        else
-        {
-
+            perror("msgsnd cloud\n");
+            break;
         }
     }
 
