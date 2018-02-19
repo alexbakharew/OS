@@ -2,7 +2,6 @@
 #define MSG_SIZE 1028
 #include <stdbool.h>
 char server_addr[] = {"server"};
-
 typedef struct // struct of message
 {
     char sender[14];

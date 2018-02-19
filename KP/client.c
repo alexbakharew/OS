@@ -41,10 +41,11 @@ int main()
         exit(-1);
     }
     
+    stored_message* message = (stored_message*) malloc(sizeof(stored_message)); // buffer for message
+    strcpy(message->sender, name);// this field is unique and immutable
     while(1)
     {
         char command[2];
-
         printf("What you want?\n");
         printf("m - compose and send message to someone\n");
         printf("r - refresh letter box. May be someone just texted to you?\n");
@@ -52,12 +53,11 @@ int main()
         scanf("%s", command);
         if(strcmp(command, "m") == 0) // write message
         {
-            stored_message* message = (stored_message*) malloc(sizeof(stored_message));
             message->type = false; //simple message
             strcpy(message->sender, name);
             printf("To :");
             scanf("%s", message->recipient);
-            printf("<Your message>\n");
+            printf("Your message: \n");
             scanf("%s", message->msg);
 
             fflush(stdin); // temp measures
@@ -76,20 +76,22 @@ int main()
         }
         if(strcmp(command, "r") == 0) //request for mail
         {
-            stored_message* message = (stored_message*) malloc(sizeof(stored_message));
             message->type = true; // request
-            strcpy(message->sender, name);
-            //strcpy(message->msg, "r");
             if(send(client_sock, (void*)message, sizeof(stored_message), 0) > 0) printf("Your request was successfully sent\n");
-            //while(1)
-            //{
+            while(1)
+            {
                 printf("waiting for answer...\n");
+                // recieve message
+                //print content
                 sleep(3);
-            //}
-            free(message);
+            }
             continue;
         }
-        else if(strcmp(command, "q") == 0) exit(0);
+        else if(strcmp(command, "q") == 0) 
+        {
+            free(message);
+            exit(0);
+        }
         else printf("Undefined command\n");
     }
     return 0;
