@@ -52,7 +52,7 @@ bool authentification(message* msg, int msgid_server)
     scanf("%li", &msg->sender_id);
     printf("Enter your amount of money in the bank\n");
     scanf("%lli\n", &msg->value);
-    msg->type = 0;// at first, auth message
+    msg->type = AUTH_MSG;// at first, auth message
     if(msgsnd(msgid_server, msg, sizeof(message), IPC_NOWAIT) == -1)// sending auth message
     {
         perror("msgsnd ");
@@ -107,6 +107,7 @@ void reply(int msgid_client)
 }
 int main()
 {
+    printf("CLIENT APPLICATION\n");
     message* msg = (message*) malloc(sizeof(message));
     int msgid_serv = connect(); // connection to preferable bank
     if(msgid_serv == CONNECT_ERROR)
