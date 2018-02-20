@@ -28,6 +28,7 @@ int main()
     struct sockaddr_un client_address; // struct for address of the client
     client_address.sun_family = AF_UNIX; //type of client
     strcpy(client_address.sun_path, name);// initialize an unique client
+    
     if(unlink(name) == -1) perror("unlink:");
     if(bind(client_sock, (struct sockaddr*)&client_address, sizeof(client_address)) == -1) // Binding address to socket
     {
@@ -71,21 +72,27 @@ int main()
             }
             //fflush(stdin); // temp measures
             //fflush(stdout); // temp measures
-            free(message);
             continue;
         }
         if(strcmp(command, "r") == 0) //request for mail
         {
             message->type = true; // request
             if(send(client_sock, (void*)message, sizeof(stored_message), 0) > 0) printf("Your request was successfully sent\n");
-            while(1)
+           /* while(1)
             {
-                printf("waiting for answer...\n");
-                // recieve message
-                //print content
-                sleep(3);
-            }
-            continue;
+                if(recv(client_sock,message, sizeof(stored_message), 0) < 1)
+                {
+                    printf("waiting for answer...\n");
+                    sleep(3);
+                    continue;
+                }
+                else
+                {
+                    printf("From : %s\n", message->sender);
+                    printf("%s\n", message->msg);
+                    break;
+                }
+            }*/
         }
         else if(strcmp(command, "q") == 0) 
         {
