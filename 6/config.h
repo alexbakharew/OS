@@ -1,3 +1,5 @@
+#ifndef CONFIG_H
+#define CONFIG_H
 #define SBERBANK 100
 #define VTB 101
 #define RAIFAZEN 102
@@ -22,3 +24,4 @@ typedef struct /*msgbuf*/ //main struct
     long int recipient_id;    
     long long int value;
 }message;
+#endif //CONFIG_H

@@ -8,6 +8,7 @@
 #include <string.h>
 #include "config.h"
 #include <stdbool.h>
+char server_addr[] = {"server"};
 int main()
 {
     int client_sock;
@@ -26,7 +27,7 @@ int main()
     strcpy(server_address.sun_path, server_addr); // copy address of the server(defined in config.h) 
 
     struct sockaddr_un client_address; // struct for address of the client
-    client_address.sun_family = AF_UNIX; //type of client
+    client_address.sun_family = AF_UNIX; // type of client
     strcpy(client_address.sun_path, name);// initialize an unique client
     
     if(unlink(name) == -1) perror("unlink:");
@@ -54,8 +55,7 @@ int main()
         scanf("%s", command);
         if(strcmp(command, "m") == 0) // write message
         {
-            message->type = false; //simple message
-            strcpy(message->sender, name);
+            message->type = _msg; //simple message
             printf("To :");
             scanf("%s", message->recipient);
             printf("Your message: \n");
@@ -70,13 +70,11 @@ int main()
                 printf("Something went wrong. Do you want to send it again? [Y/n]\n");
                 perror("send");
             }
-            //fflush(stdin); // temp measures
-            //fflush(stdout); // temp measures
             continue;
         }
         if(strcmp(command, "r") == 0) //request for mail
         {
-            message->type = true; // request
+            message->type = _request; // request
             if(send(client_sock, (void*)message, sizeof(stored_message), 0) > 0) printf("Your request was successfully sent\n");
            /* while(1)
             {
@@ -96,6 +94,8 @@ int main()
         }
         else if(strcmp(command, "q") == 0) 
         {
+            message->type = _quit;
+            send(client_sock, (void*)message, sizeof(stored_message), 0);
             free(message);
             exit(0);
         }

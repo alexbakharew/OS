@@ -35,6 +35,7 @@ int main()
     */
     char a = 'a';
     if(a == 'a') printf("JOPA\n");
-     
+    system("./bank_setup");
+    printf("I'm here\n");
     return 0;
 }

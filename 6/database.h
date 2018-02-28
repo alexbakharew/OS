@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "config.h"
 typedef struct
 {
@@ -11,15 +12,15 @@ typedef struct field field;
 struct field
 {
     client user;
-    node* next;
-    node* prev;
+    field* next;
+    field* prev;
 };
-typedef struct database
+typedef struct 
 {
     field* begin;
     field* end;
     size_t size;
-}
+}database;
 database* initialize();
 bool add_user(database* list, message* auth_msg);
 bool remove_user(database* list, message* shutdown_msg);

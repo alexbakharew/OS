@@ -2,6 +2,7 @@
 #include<sys/ipc.h>
 #include<sys/msg.h>
 #include <stdio.h>
+#include <stdbool.h>
 #include "config.h"
 #include "database.h"
 int connect()
@@ -24,7 +25,11 @@ void proccessing(message* msg, database* list)
 {
     if(msg->type == AUTH_MSG)
     {
-
+        if(!add_user(list, msg))
+        {
+            msg->value = AUTH_ERROR;
+            return;
+        }
     }
     else if(msg->type == 1)// Transfer $
     {
@@ -55,7 +60,7 @@ void proccessing(message* msg, database* list)
     }
     else if(msg->type == 3)// withdraw $
     {
-        field* tmp = find_user(list, msg->sender);
+        field* tmp = find_user(list, msg->sender_id);
         if(msg->value <= tmp->user.account)
         {
             tmp->user.account -= msg->value;
@@ -69,7 +74,7 @@ void proccessing(message* msg, database* list)
     }
     else // 4
     {
-        field* tmp = find_user(list, msg->sender);
+        field* tmp = find_user(list, msg->sender_id);
         tmp->user.account += msg->value;
         return;
     }
@@ -77,18 +82,24 @@ void proccessing(message* msg, database* list)
 int main()
 {
     int msgid_cloud = connect();
-    if(msgid == CONNECT_ERROR) exit(-1);
+    if(msgid_cloud == CONNECT_ERROR) exit(-1);
     message* msg = (message*) malloc(sizeof(message));
     database* list = initialize();
     while(1)
     {
-        if(msgrcv(msgid_cloud, msg, sizeod(message), 0, 0) < 1) continue;
+        printf("waiting\n");
+        if(msgrcv(msgid_cloud, msg, sizeof(message), 0, 1) < 0)
+        {
+            printf("Waiting for msgs from server\n");
+            continue;
+        }
+        printf("Message recieved\n");
         proccessing(msg, list);
         int msgid_sender = msgget((key_t)msg->sender_id, IPC_CREAT | 0666);
-        if(msgsnd(msgid_sender, msg, sizeof(message), IPC_NOWAIT) == -1)
+        if(msgsnd(msgid_sender, msg, sizeof(message), IPC_NOWAIT) < 0)
         {
             perror("msgsnd 1\n");
         }
     }
-    return;
+    return 0;
 }

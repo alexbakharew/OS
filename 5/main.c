@@ -8,12 +8,12 @@ int main()
     dq->begin = NULL;
     dq->end = NULL;
     printf("%lu\n", size(dq));
-    push_front(dq, 500);
-    push_front(dq, 600);
-    push_front(dq, 700);
+    push_front(dq, 100);
+    push_front(dq, 200);
+    push_front(dq, 300);
+    push_back(dq, 400);
     push_back(dq, 500);
-    push_back(dq, 500);
-    push_back(dq, 500);
+    push_back(dq, 600);
     printf("%lu\n", pop_front(dq));
     printf("%lu\n", pop_front(dq));
     printf("%lu\n", pop_back(dq));

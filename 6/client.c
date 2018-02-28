@@ -34,17 +34,15 @@ int connect()
     }
     if(msgid != -1)
     {
-        printf("successfull connection\n");
         return msgid;
     }
     else 
     {
-        printf("Erorr while connection\n");
         return CONNECT_ERROR;
     }
 }
 
-bool authentification(message* msg, int msgid_server)
+bool authentification(message* msg, int msgid_server, int msgid_client)
 {
     printf("Enter your name\n");
     scanf("%s", msg->name);
@@ -53,16 +51,22 @@ bool authentification(message* msg, int msgid_server)
     printf("Enter your amount of money in the bank\n");
     scanf("%lli\n", &msg->value);
     msg->type = AUTH_MSG;// at first, auth message
-    if(msgsnd(msgid_server, msg, sizeof(message), IPC_NOWAIT) == -1)// sending auth message
+    if(msgsnd(msgid_server, msg, sizeof(message), IPC_NOWAIT) < 0)// sending auth message
     {
         perror("msgsnd ");
         exit(-1);
     }
+    printf("1\n");
     while(1)
     {
         message* tmp_msg = (message*) malloc(sizeof(message));
-        if(msgrcv(msgid_server, tmp_msg, sizeof(message), 0, 0) < 1) continue;
-        if(tmp_msg->type == AUTH_ERROR)
+        if(msgrcv(msgid_client, tmp_msg, sizeof(message), 0, 1) < 0) 
+        {
+            printf("waiting for authorization...\n");
+            sleep(3);
+            continue;
+        }
+        if(tmp_msg->value == AUTH_ERROR)
         {
             free(tmp_msg);
             return false;
@@ -116,19 +120,19 @@ int main()
         exit(-1);
     }
     else printf("Successful connection\n");
-    if(!authentification(msg, msgid_serv)) 
-    {
-        printf("Error while authentification on server\n");
-        exit(-1);
-    }
-    else printf("Successful authorization\n");
-
     int msgid_client = msgget((key_t)msg->sender_id, IPC_CREAT | 0666); //MQ for client
     if(msgid_client == -1) 
     {
         perror("msgget\n");
         exit(-1);
     }
+    if(!authentification(msg, msgid_serv, msgid_client)) 
+    {
+        printf("Error while authentification on server\n");
+        exit(-1);
+    }
+    else printf("Successful authorization\n");
+
     char command;
     while(1)
     {
@@ -195,6 +199,7 @@ int main()
             printf("exit from client\n");
             msgctl(msgid_client,IPC_RMID,NULL);
             free(msg);
+            exit(0);
         }  
         else printf("Wrong command. Try again\n");
     }
