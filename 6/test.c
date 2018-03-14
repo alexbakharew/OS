@@ -6,36 +6,44 @@
 #include <time.h>
 #include <unistd.h>
 #include "config.h"
+#include "database.h"
 int main()
 {
-    /*int msgid = msgget(10, 0666 | IPC_CREAT);
-    message* msg_s = (message*) malloc(sizeof(message));
+    message* msg_a = (message*) malloc(sizeof(message));
+    message* msg_b = (message*) malloc(sizeof(message));
     message* msg_c = (message*) malloc(sizeof(message));
-    message* clnt = (message*) malloc(sizeof(message));
-    //msg_s->mtype = 1;
-    //msg_c->mtype = 1;
-    //clnt->mtype = 1;
-    msg_s->type = 2;
-    msg_c->type = 2;
-    clnt->type = 2;
-    msgsnd(msgid, msg_s, sizeof(message), IPC_NOWAIT);
-    msgsnd(msgid, msg_c, sizeof(message), IPC_NOWAIT); 
-    msgsnd(msgid, clnt, sizeof(message), IPC_NOWAIT); 
-    free(msg_s);
-    free(msg_c);
-    free(clnt);
-    sleep(3);
-    printf("---------------------------\n");
-    message* msg_s1 = (message*) malloc(sizeof(message));
-    message* msg_c1 = (message*) malloc(sizeof(message));
-    message* clnt1 = (message*) malloc(sizeof(message));
-    msgrcv(msgid, msg_s1, sizeof(message), 0, 0);
-    msgrcv(msgid, msg_c1, sizeof(message), 0, 0);
-    msgrcv(msgid, clnt1, sizeof(message), 0, 0);
-    */
-    char a = 'a';
-    if(a == 'a') printf("JOPA\n");
-    system("./bank_setup");
-    printf("I'm here\n");
+
+    printf("a--------------------------------------------------\n");
+
+     printf("Enter your name\n");
+    scanf("%s", msg_a->name);
+    printf("Enter your id\n");
+    scanf("%li", &msg_a->sender_id);
+    printf("Enter your amount of money in the bank\n");
+    scanf("%lli", &msg_a->value);
+
+     printf("b-------------------------------------------------\n");
+
+     printf("Enter your name\n");
+    scanf("%s", msg_b->name);
+    printf("Enter your id\n");
+    scanf("%li", &msg_b->sender_id);
+    printf("Enter your amount of money in the bank\n");
+    scanf("%lli", &msg_b->value);
+
+    printf("c-------------------------------------------------\n");
+
+     printf("Enter your name\n");
+    scanf("%s", msg_c->name);
+    printf("Enter your id\n");
+    scanf("%li", &msg_c->sender_id);
+    printf("Enter your amount of money in the bank\n");
+    scanf("%lli", &msg_c->value);
+    printf("----------------------------------------------------\n");
+
+    database* list = initialize();
+    add_user(list, msg_a);
+    add_user(list, msg_b);
+    add_user(list, msg_c);
     return 0;
 }

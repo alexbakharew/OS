@@ -6,7 +6,8 @@ typedef struct
 {
     char name[14];
     long int id;
-    long long int account;
+    long int credit_account;
+    long int debit_account;
 }client;
 typedef struct field field;
 struct field

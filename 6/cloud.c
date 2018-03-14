@@ -8,7 +8,7 @@
 int connect()
 {
     int msgflg = IPC_CREAT | 0666;
-    key_t key = (key_t)SBERBANK_CLOUD;// You should explicitly chose bank
+    key_t key = (key_t)SBERBANK;// You should explicitly chose bank
     int msgid = msgget(key, msgflg);
     if(msgid != -1)
     {
@@ -84,11 +84,12 @@ int main()
     int msgid_cloud = connect();
     if(msgid_cloud == CONNECT_ERROR) exit(-1);
     message* msg = (message*) malloc(sizeof(message));
+    msg->mtype = 1;
     database* list = initialize();
     while(1)
     {
-        printf("waiting\n");
-        if(msgrcv(msgid_cloud, msg, sizeof(message), 0, 1) < 0)
+        //printf("waiting\n");
+        if(msgrcv(msgid_cloud, msg, sizeof(message), 1, 0) < 0)
         {
             printf("Waiting for msgs from server\n");
             continue;

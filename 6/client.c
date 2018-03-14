@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <unistd.h>
 #include "config.h"
 int connect()
 {
@@ -34,71 +35,36 @@ int connect()
     }
     if(msgid != -1)
     {
+        printf("Successful connection\n");
         return msgid;
     }
     else 
     {
-        return CONNECT_ERROR;
-    }
-}
-
-bool authentification(message* msg, int msgid_server, int msgid_client)
-{
-    printf("Enter your name\n");
-    scanf("%s", msg->name);
-    printf("Enter your id\n");
-    scanf("%li", &msg->sender_id);
-    printf("Enter your amount of money in the bank\n");
-    scanf("%lli\n", &msg->value);
-    msg->type = AUTH_MSG;// at first, auth message
-    if(msgsnd(msgid_server, msg, sizeof(message), IPC_NOWAIT) < 0)// sending auth message
-    {
-        perror("msgsnd ");
+        printf("Error while connection to the server\n");
         exit(-1);
     }
-    printf("1\n");
-    while(1)
-    {
-        message* tmp_msg = (message*) malloc(sizeof(message));
-        if(msgrcv(msgid_client, tmp_msg, sizeof(message), 0, 1) < 0) 
-        {
-            printf("waiting for authorization...\n");
-            sleep(3);
-            continue;
-        }
-        if(tmp_msg->value == AUTH_ERROR)
-        {
-            free(tmp_msg);
-            return false;
-        }
-        else
-        {
-            free(tmp_msg);            
-            return true;
-        }
-    }
 }
-
 void reply(int msgid_client)
 {
     message* tmp_msg = (message*) malloc(sizeof(message));
     while(1)
     {
-        if(msgrcv(msgid_client, tmp_msg, sizeof(message), 0, 0) < 1) continue;
+        if(msgrcv(msgid_client, tmp_msg, sizeof(message), 1, 0) < 1) continue;
         if(tmp_msg->type == 1)
         {
-            if(tmp_msg->value == NOT_ENOUGH_MONEY) printf("Not enough money for this operation\n");
-            else if(tmp_msg->value == UNREGISTERED_USER) printf("No such user in system\n");
+            if(tmp_msg->debit_acc == NOT_ENOUGH_MONEY) printf("Not enough money for this operation.\n");
+            else if(tmp_msg->debit_acc  == UNREGISTERED_USER) printf("No such user in system\n");
             else printf("Successful transfer!\n");
         }
         else if(tmp_msg->type == 2)
         {
-            printf("You have: %llu$\n", tmp_msg->value);
+            printf("You have: %lli$ on debit account\n", tmp_msg->debit_acc);
+            printf("You have: %lli$ on credit account\n", tmp_msg->credit_acc);
         }
         else if(tmp_msg->type == 3)
         {
-            if(tmp_msg->value == NOT_ENOUGH_MONEY) printf("Not enough money for this operation\n");
-            else printf("Operation complete. Here your %llu$\n", tmp_msg->value);
+            if(tmp_msg->debit_acc  == NOT_ENOUGH_MONEY) printf("Not enough money for this operation\n");
+            else printf("Operation complete. Here your %llu$\n", tmp_msg->debit_acc );
         }
         else if(tmp_msg->type == 4)
         {
@@ -109,29 +75,52 @@ void reply(int msgid_client)
         return;                    
     }
 }
+int auth(int msgid_serv, message* msg)
+{
+    printf("Enter your name\n");
+    scanf("%s", msg->name);
+    printf("Enter your id\n");
+    scanf("%li", &msg->sender_id);
+    printf("Enter your amount of money in the bank\n");
+    scanf("%lli", &msg->debit_acc );
+    int msgid_client = msgget((key_t)msg->sender_id, 0666 | IPC_CREAT);
+    msg->type = AUTH_MSG;
+    msgsnd(msgid_serv, msg, sizeof(message), IPC_NOWAIT);// sending auth message to server
+
+    message* tmp_msg = (message*) malloc(sizeof(message));
+    while(1)// waiting fo result
+    {
+        if(msgrcv(msgid_client, tmp_msg, sizeof(message), 1, 0) < 0)
+        {
+            sleep(1);
+            printf("waiting for authorization..\n");
+        }
+        else
+        {
+            if(tmp_msg->type == AUTH_ERROR)
+            {
+                printf("Error while authorization\n");
+                free(tmp_msg);
+                exit(-1);
+            }
+            else 
+            {
+                free(tmp_msg);
+                printf("Successfull authorization\n");
+                return msgid_client;
+            }
+        }
+    }
+}
 int main()
 {
     printf("CLIENT APPLICATION\n");
     message* msg = (message*) malloc(sizeof(message));
+    msg->mtype = 1;// default value
+
     int msgid_serv = connect(); // connection to preferable bank
-    if(msgid_serv == CONNECT_ERROR)
-    {
-        printf("Error while connection to the server\n");
-        exit(-1);
-    }
-    else printf("Successful connection\n");
-    int msgid_client = msgget((key_t)msg->sender_id, IPC_CREAT | 0666); //MQ for client
-    if(msgid_client == -1) 
-    {
-        perror("msgget\n");
-        exit(-1);
-    }
-    if(!authentification(msg, msgid_serv, msgid_client)) 
-    {
-        printf("Error while authentification on server\n");
-        exit(-1);
-    }
-    else printf("Successful authorization\n");
+
+    int msgid_client = auth(msgid_serv, msg);// auth on the server
 
     char command;
     while(1)
@@ -149,7 +138,7 @@ int main()
             printf("Enter id of recipient\n");
             scanf("%li", &msg->recipient_id);
             printf("Enter amount of $\n");
-            scanf("%lli", &msg->value);
+            scanf("%lli", &msg->debit_acc);
             if(msgsnd(msgid_serv, msg, sizeof(message), IPC_NOWAIT) == -1)
             {
                 perror("msgsnd 1\n");
@@ -173,7 +162,7 @@ int main()
             //sender_id is already filled                        
             msg->type = 3;
             printf("how much money do you want to withdraw?\n");
-            scanf("%lli", &(msg->value));
+            scanf("%lli", &(msg->debit_acc));
             if(msgsnd(msgid_serv, msg, sizeof(message), IPC_NOWAIT) == -1)
             {
                 perror("msgsnd 3\n");
@@ -185,8 +174,23 @@ int main()
         {
             //sender_id is already filled                                    
             msg->type = 4;
-            printf("how much money you want to add to your account?\n");
-            scanf("%lli", &(msg->value));
+            printf("which account you want to replish? [D/C]\n");
+            fflush(stdin);
+            fflush(stdout);
+            char c;
+            scanf("%s", &c);
+            if(c == 'D')
+            {
+                printf("how much money you want to add to your debit account?\n");
+                scanf("%lli", &(msg->debit_acc)); 
+                msg->credit_acc = 0;
+            }
+            else
+            {
+                printf("how much money you want to add to your credit account?\n");
+                scanf("%lli", &(msg->credit_acc)); 
+                msg->debit_acc = 0;
+            }
             if(msgsnd(msgid_serv, msg, sizeof(message), IPC_NOWAIT) == -1)
             {
                 perror("msgsnd 4\n");

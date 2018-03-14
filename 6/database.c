@@ -18,7 +18,8 @@ bool add_user(database* list, message* auth_msg)
     if(tmp == NULL) return false;
     strcpy(tmp->user.name, auth_msg->name);
     tmp->user.id = auth_msg->sender_id;
-    tmp->user.account = auth_msg->value; // Money 
+    tmp->user.debit_account = auth_msg->debit_acc; // Money 
+    tmp->user.credit_account = 0;
     if(list->size == 0)
     {
         list->begin = tmp;
@@ -42,7 +43,7 @@ bool add_user(database* list, message* auth_msg)
 field* find_user(database* list, long long int id)// try to find rec
 {
     field* tmp = list->begin;
-    while(tmp != list->end)
+    while(tmp != NULL)
     {
         if(tmp->user.id == id) return tmp;
         tmp = tmp->next;
