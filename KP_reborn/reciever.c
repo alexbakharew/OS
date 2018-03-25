@@ -1,13 +1,14 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include "config.h"
 int main()
 {
     int sock, listener;
     struct sockaddr_in addr;
-    char buf[1024];
-    int bytes_read;
     listener = socket(AF_INET, SOCK_STREAM, 0);
     if(listener < 0)
     {
@@ -25,8 +26,10 @@ int main()
         exit(2);
     }
 
-    listen(listener, 1);
+    listen(listener, MAX_QUEUE_LEN);
     
+    stored_message* message = (stored_message*) malloc(sizeof(stored_message)); // buffer for message
+
     while(1)
     {
         sock = accept(listener, NULL, NULL);
@@ -35,14 +38,20 @@ int main()
             perror("accept");
             exit(3);
         }
+        recv(sock, message, sizeof(stored_message), 0);
 
-        //while(1)
-        //{
-            bytes_read = recv(sock, buf, 1024, 0);
-            //if(bytes_read <= 0) break;
-            send(sock, buf, bytes_read, 0);
-        //}
-    
+        if(message->type == _msg)
+        {
+            message->result = true;
+        }
+        else if(message->type == _request)
+        {
+            message->result = true;
+            strcpy(message->msg, "JOPA!");
+            printf("Jopa\n");
+        }
+        
+        send(sock, message, sizeof(stored_message), 0);
         close(sock);
     }
     close(listener);

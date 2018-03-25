@@ -14,6 +14,7 @@ typedef struct // struct of message
     char sender[14];
     char recipient[14];
     char msg[MSG_SIZE];
+    bool result;
     int type;
 } stored_message;
 #endif
