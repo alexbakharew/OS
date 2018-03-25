@@ -29,31 +29,30 @@ int main()
     struct sockaddr_un client_address; // struct for address of the client
     client_address.sun_family = AF_UNIX; // type of client
     strcpy(client_address.sun_path, name);// initialize an unique client
-    
     if(unlink(name) == -1) perror("unlink:");
-    if(bind(client_sock, (struct sockaddr*)&client_address, sizeof(client_address)) == -1) // Binding address to socket
+    if((bind(client_sock, (struct sockaddr*)&client_address, sizeof(client_address))) == -1) // Binding address to socket
     {
         perror("bind"); 
         exit(-1);
     }
     // connect to server
-    if(connect(client_sock, (struct sockaddr*) &server_address, sizeof(server_address)) == -1) 
+    if((connect(client_sock, (struct sockaddr*) &server_address, sizeof(server_address))) == -1) 
     {
         printf("Error while connecting to the server\n");
         exit(-1);
     }
-    
+    perror("connect:");
     stored_message* message = (stored_message*) malloc(sizeof(stored_message)); // buffer for message
     strcpy(message->sender, name);// this field is unique and immutable
     while(1)
     {
-        char command[2];
+        char command;
         printf("What you want?\n");
         printf("m - compose and send message to someone\n");
         printf("r - refresh letter box. May be someone just texted to you?\n");
         printf("q - exit from client\n");
-        scanf("%s", command);
-        if(strcmp(command, "m") == 0) // write message
+        scanf("%s", &command);
+        if(command == 'm') // write message
         {
             message->type = _msg; //simple message
             printf("To :");
@@ -64,7 +63,7 @@ int main()
             fflush(stdin); // temp measures
             fflush(stdout); // temp measures
 
-            if(send(client_sock, (void*)message, sizeof(stored_message), 0) != -1) printf("Your message was successfully sent\n");
+            if((send(client_sock, (void*)message, sizeof(stored_message), 0)) > 1) printf("Your message was successfully sent\n");
             else
             {
                 printf("Something went wrong. Do you want to send it again? [Y/n]\n");
@@ -72,10 +71,10 @@ int main()
             }
             continue;
         }
-        if(strcmp(command, "r") == 0) //request for mail
+        if(command == 'r') //request for mail
         {
             message->type = _request; // request
-            if(send(client_sock, (void*)message, sizeof(stored_message), 0) > 0) printf("Your request was successfully sent\n");
+            if((send(client_sock, (void*)message, sizeof(stored_message), 0)) > 0) printf("Your request was successfully sent\n");
            /* while(1)
             {
                 if(recv(client_sock,message, sizeof(stored_message), 0) < 1)
@@ -92,7 +91,7 @@ int main()
                 }
             }*/
         }
-        else if(strcmp(command, "q") == 0) 
+        else if(command == 'q') 
         {
             message->type = _quit;
             send(client_sock, (void*)message, sizeof(stored_message), 0);
