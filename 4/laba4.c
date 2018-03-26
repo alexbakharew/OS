@@ -326,7 +326,6 @@ int main(int argc, char* argv[])
 			scanf("%s", command);
 			
 		}//scope without func
-
 	}
 	quit(fd);
 	return 0;

@@ -5,23 +5,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include "database.h"
-void* create_shared_memory(size_t size) 
-{
-  // Our memory buffer will be readable and writable:
-  int protection = PROT_READ | PROT_WRITE;
-
-  // The buffer will be shared (meaning other processes can access it), but
-  // anonymous (meaning third-party processes cannot obtain an address for it),
-  // so only this process and its children will be able to use it:
-  int visibility = MAP_ANONYMOUS | MAP_SHARED;
-
-  // The remaining parameters to `mmap()` are not important for this use case,
-  // but the manpage for `mmap` explains their purpose.
-  return mmap(NULL, size, protection, visibility, -1, 0);
-}
 database* create_list()
 {
-    database* list = create_shared_memory(sizeof(database));
+    database* list = (database*) malloc(sizeof(database));
     list->begin = NULL;
     list->end = NULL;
     list->size = 0;
@@ -29,12 +15,17 @@ database* create_list()
 }
 bool add(database* list, stored_message* msg)
 {
-    stored_message* tmp = create_shared_memory(sizeof(stored_message));
+    stored_message* tmp = (stored_message*)malloc(sizeof(stored_message));
     if(tmp == NULL) return false;
-    tmp = msg;
-    field* fld = create_shared_memory(sizeof(field));
+    tmp = (stored_message*) msg;
+
+    printf("recipient is %s\n",(char*)tmp->recipient);
+    printf("sender is %s\n", (char*)tmp->sender);
+    printf("message is %s\n", (char*)tmp->msg);
+    
+    field* fld = (field*)malloc(sizeof(field));
     if(fld == NULL) return false;
-    fld->msg = msg;
+    fld->msg = tmp;
     if(list->size == 0)
     {
         fld->next = NULL;
@@ -59,7 +50,7 @@ field* find(database* list, char* name)
     field* tmp = list->begin;
     while(tmp != NULL)
     {
-        if(!strcmp(name, tmp->msg->recipient))
+        if(!strcmp(name, tmp->msg->sender))
         {
             break;
         }
@@ -84,4 +75,39 @@ void print_list(database* list)
         ++i;
     }
     return;
+}
+bool purge(database* list, field* fld)
+{
+    if(list->size == 1)
+    {
+        list->begin = NULL;
+        list->end = NULL
+        free(fld);
+        --list->size;
+        return true;
+    }
+    if(fld == list->begin)
+    {
+        fld->next->prev = NULL;
+        list->begin = fld->next;
+        free(fld);
+        --list->size;        
+        return true;
+    }
+    if(fld == list->end)
+    {
+        fld->prev->next = NULL;
+        list->end = fld->prev;
+        free(fld);
+        --list->size;
+        return true;
+    }
+    else
+    {
+        fld->prev->next = fld->next;
+        fld->next->prev = fld->prev;
+        free(fld);        
+        --list->size;
+        return true;        
+    }
 }

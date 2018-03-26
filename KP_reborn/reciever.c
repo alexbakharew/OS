@@ -1,10 +1,12 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include "config.h"
+#include "database.h"
 int main()
 {
     int sock, listener;
@@ -29,7 +31,7 @@ int main()
     listen(listener, MAX_QUEUE_LEN);
     
     stored_message* message = (stored_message*) malloc(sizeof(stored_message)); // buffer for message
-
+    database* list = create_list();
     while(1)
     {
         sock = accept(listener, NULL, NULL);
@@ -42,13 +44,24 @@ int main()
 
         if(message->type == _msg)
         {
-            message->result = true;
+            if(add(list, message))
+            {
+                message->result = true;
+            }
+            else message->result = true;
         }
         else if(message->type == _request)
         {
-            message->result = true;
-            strcpy(message->msg, "JOPA!");
-            printf("Jopa\n");
+            printf("---------------\n");
+            print_list(list);
+            field* tmp = find(list, message->sender);
+            if(tmp == NULL) message->result = false;
+            else
+            {
+                strcpy(message->msg, tmp->msg->msg);
+                message->result = true;       
+                purge(list, tmp);     
+            }
         }
         
         send(sock, message, sizeof(stored_message), 0);

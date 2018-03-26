@@ -2,6 +2,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include "config.h"
