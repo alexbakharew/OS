@@ -36,6 +36,7 @@ int main()
             fflush(stdin); // temp measures
             fflush(stdout); // temp measures
             add(list, message);
+            //print_list(list);
 
         }
         else if(command == 'p')
@@ -49,9 +50,8 @@ int main()
             scanf("%s", name);
             field* tmp = find(list, name);
             if(!tmp) printf("User find\n");
-            else("NO\n");
+            else printf("NO\n");
             purge(list, tmp);
-
         }
     }
 }

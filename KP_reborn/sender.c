@@ -31,7 +31,6 @@ int main()
         }
         else if(command == 'r') //request for mail
         {
-            printf("In request section\n");
             message->type = _request; // request
         }
         else if(command == 'q') 
@@ -78,7 +77,7 @@ int main()
         {
             if(message->result) 
             {
-                printf("You have message from %s\n:", message->sender);
+                printf("You have message from %s:", message->recipient);
                 printf("%s\n", message->msg);
             }
             else printf("Letter box is empty\n");

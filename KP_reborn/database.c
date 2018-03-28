@@ -17,15 +17,10 @@ bool add(database* list, stored_message* msg)
 {
     stored_message* tmp = (stored_message*)malloc(sizeof(stored_message));
     if(tmp == NULL) return false;
-    tmp = (stored_message*) msg;
-
-    printf("recipient is %s\n",(char*)tmp->recipient);
-    printf("sender is %s\n", (char*)tmp->sender);
-    printf("message is %s\n", (char*)tmp->msg);
-    
+    *tmp = *msg;
     field* fld = (field*)malloc(sizeof(field));
     if(fld == NULL) return false;
-    fld->msg = tmp;
+    fld->msg = tmp;   
     if(list->size == 0)
     {
         fld->next = NULL;
@@ -47,16 +42,16 @@ bool add(database* list, stored_message* msg)
 }
 field* find(database* list, char* name)
 {
-    field* tmp = list->begin;
+    field* tmp = list->end;
     while(tmp != NULL)
     {
-        if(!strcmp(name, tmp->msg->sender))
+        if(strcmp(name, tmp->msg->recipient) == 0)
         {
             break;
         }
         else
         {
-            tmp = tmp->next;
+            tmp = tmp->prev;
             continue;
         }
     }
@@ -65,14 +60,15 @@ field* find(database* list, char* name)
 void print_list(database* list)
 {
     field* tmp = list->begin;
-    int i = 0;
-    while(i != list->size)
+    //printf("%d\n", list->size);
+    while(tmp != NULL)
     {
+        printf("------------------------------\n");
         printf("recipient is %s\n",(char*)tmp->msg->recipient);
         printf("sender is %s\n", (char*)tmp->msg->sender);
         printf("message is %s\n", (char*)tmp->msg->msg);
+        printf("------------------------------\n");        
         tmp = tmp->next;
-        ++i;
     }
     return;
 }
@@ -81,7 +77,7 @@ bool purge(database* list, field* fld)
     if(list->size == 1)
     {
         list->begin = NULL;
-        list->end = NULL
+        list->end = NULL;
         free(fld);
         --list->size;
         return true;
